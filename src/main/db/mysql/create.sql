@@ -11,15 +11,15 @@ CREATE TABLE games (
 PRIMARY KEY (gid)
 ) COMMENT='Two person game representation';
 
-DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS players;
 
-CREATE TABLE users (
-	uid INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE players (
+	pid INT NOT NULL AUTO_INCREMENT,
 	username VARCHAR(50) NOT NULL,
 	email VARCHAR(100),
-PRIMARY KEY (uid)
+PRIMARY KEY (pid)
 )
-COMMENT='Storage of user detail info';
+COMMENT='Storage of player detail info';
 
 
 

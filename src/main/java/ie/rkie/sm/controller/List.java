@@ -1,7 +1,7 @@
 package ie.rkie.sm.controller;
 
-import ie.rkie.sm.db.User;
-import ie.rkie.sm.db.UserDao;
+import ie.rkie.sm.db.Player;
+import ie.rkie.sm.db.PlayerDao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class List {
 	
 	@Autowired
-	private UserDao userDao;
+	private PlayerDao userDao;
 	
 	/**
 	 * Returns a list of all users and their email.
@@ -29,7 +29,7 @@ public class List {
 	@ResponseBody
 	public String listUsers() {
 		StringBuilder builder = new StringBuilder("<html><body><ol>");
-		for ( User user : userDao.findAll() ) {
+		for ( Player user : userDao.findAll() ) {
 			builder.append("<li>").append(user.getUsername()).append(": ").append(user.getEmail()).append("</li>");
 		}
 		builder.append("</ol></body></html>");

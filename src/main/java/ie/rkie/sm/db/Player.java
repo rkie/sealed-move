@@ -8,16 +8,16 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 /**
- * Represents a user that can start or participate in a game.
+ * Represents a player that can start or participate in a game.
  *
  */
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "players")
+public class Player {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long uid;
+	private long pid;
 
 	// The user's email
 	@NotNull
@@ -27,27 +27,27 @@ public class User {
 	@NotNull
 	private String username;
 
-	public User() {
+	public Player() {
 		super();
 	}
 	
-	public User(long uid) {
+	public Player(long pid) {
 		super();
-		this.uid = uid;
+		this.pid = pid;
 	}
 
-	public User(String email, String username) {
+	public Player(String email, String username) {
 		super();
 		this.email = email;
 		this.username = username;
 	}
 
-	public long getUid() {
-		return uid;
+	public long getPid() {
+		return pid;
 	}
 
-	public void setId(long uid) {
-		this.uid = uid;
+	public void setPid(long pid) {
+		this.pid = pid;
 	}
 
 	public String getEmail() {

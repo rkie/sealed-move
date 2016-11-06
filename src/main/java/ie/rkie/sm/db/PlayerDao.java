@@ -6,6 +6,6 @@ import org.springframework.data.repository.CrudRepository;
  * Provides simple access to the underlying table.
  *
  */
-public interface UserDao extends CrudRepository<User, Long> {
+public interface PlayerDao extends CrudRepository<Player, Long> {
 
 }
