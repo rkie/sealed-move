@@ -41,4 +41,9 @@ create table authorities (
 );
 create unique index ix_auth_username on authorities (username,authority);
 
+-- Example: granting ROLE_USER authority means joe hasRole("USER")
+-- insert into users values('joe', <bcrypt hashed password>, 1);
+-- insert into authorities values('joe', 'ROLE_USER');
+
+
 

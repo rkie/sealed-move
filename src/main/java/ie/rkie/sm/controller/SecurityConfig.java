@@ -21,9 +21,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 			.authorizeRequests()
 				.antMatchers("/", "/home").permitAll()
-				// TODO: role auth not working yet - need to fix this next
-				.antMatchers("/start").authenticated() //hasRole("USER")
-				.antMatchers("/list").authenticated() //hasRole("USER")
+				.antMatchers("/start").hasRole("USER")
+				.antMatchers("/list").hasRole("USER")
 				.antMatchers("/resources/css/**", "/index").permitAll()
 				.antMatchers("/resources/fonts/**", "/index").permitAll()
 				.antMatchers("/resources/js/**", "/index").permitAll()
