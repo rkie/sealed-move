@@ -30,11 +30,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.and()
 				// use the default spring login - note no way to log out yet 
 				.formLogin()
-//				.loginPage("/login")
-//				.permitAll()
-//				.and()
-//				.logout()
-//				.permitAll()
+				.loginPage("/login")
+				.permitAll()
+				.and()
+				.logout()
+				.permitAll()
 		;
 
 	}

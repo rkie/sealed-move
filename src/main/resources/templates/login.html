@@ -3,7 +3,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<title>Sealed Move - Start a New Game</title>
+		<title>Sealed Move - Please log in</title>
 		<link 
 			rel="stylesheet" 
 			href="../../webapp/resources/css/bootstrap.min.css"
@@ -12,14 +12,15 @@
 	</head>
 	<body>
 		<div class="container">
-			<h1>You can start a new game here</h1>
-		</div>
-		
-		<div><a href="/home">Home</a></div>
-		<div>
-			<a href="javascript: document.logoutForm.submit()" role="menuitem"> Logout</a>
-			<form name="logoutForm" th:action="@{/logout}" method="POST" th:hidden="true">
-				<input th:hidden="true" type="submit" value="Logout"/>
+			<h1>Login</h1>
+			<p th:if="${param.error}">Wrong user or password</p>
+			<p th:if="${param.logout}">You have been logged out</p>
+			<form th:action="@{/login}" name="f" method="post">
+				<fieldset>
+					<input type="text" id="username" name="username" placeholder="Username"/> <br />
+					<input type="password" id="password" name="password" placeholder="Password"/> <br />
+					<input type="submit" value="Log in" />
+				</fieldset>
 			</form>
 		</div>
 		<script th:src="@{/resources/js/jquery-1.11.2.min.js}" src="../../webapp/resources/js/jquery-1.11.2.min.js"></script>
