@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -11,6 +11,53 @@
 			/>
 	</head>
 	<body>
+		<nav class="navbar navbar-default">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					</button>
+				<a class="navbar-brand" href="#">Brand</a>
+				</div>
+				
+				<div sec:authorize="isAuthenticated()" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav pull-right">
+						<li class=" dropdown"><a href="#" class="dropdown-toggle active" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" th:inline="text">Signed in as [[${#httpServletRequest.remoteUser}]] <span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="#">Change Password</a></li>
+								<li><a href="#">My Profile</a></li>
+							</ul>
+						</li>
+						<li class="">			
+							<a href="javascript: document.logoutForm.submit()" role="menuitem"> Logout</a>
+							<form name="logoutForm" th:action="@{/logout}" method="POST" th:hidden="true">
+								<input th:hidden="true" type="submit" value="Logout"/>
+							</form>
+						</li>
+					</ul>
+				</div>
+				
+				<div sec:authorize="isAnonymous()" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<form id="signin" class="navbar-form navbar-right" th:action="@{/login}" method="POST">
+						<div class="input-group">
+							<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+							<input id="username" type="text" class="form-control" name="username" value="" placeholder="Username" />                                        
+						</div>
+						<div class="input-group">
+							<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+							<input id="password" type="password" class="form-control" name="password" value="" placeholder="Password"/>                                        
+						</div>
+		
+						<button type="submit" class="btn btn-primary">Login</button>
+					</form>
+				</div>
+			</div>
+		</nav>
+		
+		
 		<div class="container">
 			<h1>Welcome to the Sealed Move site</h1>
 			<div class="hero-unit">
