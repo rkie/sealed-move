@@ -11,36 +11,39 @@
 			/>
 	</head>
 	<body>
-		<nav class="navbar navbar-default">
-			<div class="container-fluid">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-					<span class="sr-only">Toggle navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					</button>
-				<a class="navbar-brand" href="#">Brand</a>
+		<div th:replace="fragments :: nav-bar">
+			<!-- This is for prototyping only -->
+			<nav class="navbar navbar-default">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						</button>
+					<a class="navbar-brand" href="#">Brand</a>
+					</div>
+					
+					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+						<ul class="nav navbar-nav pull-right">
+							<li class=" dropdown"><a href="#" class="dropdown-toggle active" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Signed in as Joe <span class="caret"></span></a>
+								<ul class="dropdown-menu">
+									<li><a href="#">Change Password</a></li>
+									<li><a href="#">My Profile</a></li>
+								</ul>
+							</li>
+							<li class="">			
+								<a href="javascript: document.logoutForm.submit()" role="menuitem"> Logout</a>
+								<form name="logoutForm" method="POST" action="/logout" hidden="hidden">
+									<input type="submit" value="Logout" hidden="hidden" />
+								<input type="hidden" name="_csrf" value="880babb0-79ae-4094-9f45-c6a23293b39c" /></form>
+							</li>
+						</ul>
+					</div>
 				</div>
-				
-				<div sec:authorize="isAuthenticated()" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-					<ul class="nav navbar-nav pull-right">
-						<li class=" dropdown"><a href="#" class="dropdown-toggle active" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" th:inline="text">Signed in as [[${#httpServletRequest.remoteUser}]] <span class="caret"></span></a>
-							<ul class="dropdown-menu">
-								<li><a href="#">Change Password</a></li>
-								<li><a href="#">My Profile</a></li>
-							</ul>
-						</li>
-						<li class="">			
-							<a href="javascript: document.logoutForm.submit()" role="menuitem"> Logout</a>
-							<form name="logoutForm" th:action="@{/logout}" method="POST" th:hidden="true">
-								<input th:hidden="true" type="submit" value="Logout"/>
-							</form>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</nav>
+			</nav>
+		</div>
 		<div class="container">
 			<h1>You can start a new game here</h1>
 		</div>
