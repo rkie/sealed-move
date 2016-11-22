@@ -1,9 +1,18 @@
 package ie.rkie.sm.dto;
 
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
+
 public class RegisterDTO {
 
+	@NotBlank
+	@NotEmpty
 	private String firstName;
+	@NotEmpty
+	@NotBlank
 	private String surname;
+	@NotEmpty
+	@NotBlank
 	private String email;
 	private String password;
 	private String matchingPassword;
