@@ -72,7 +72,7 @@ public class RegisterTest {
     			.param("surname", "surname")
     			.param("email", "email@provider.com")
     			.param("password", "password")
-    			.param("matchedPassword", "password"))
+    			.param("matchingPassword", "password"))
     		.andExpect(status().isFound())	// 302 redirect
     		.andExpect(redirectedUrl("/home"));
     }
@@ -87,7 +87,7 @@ public class RegisterTest {
     			.param("surname", "surname")
     			.param("email", "email@provider.com")
     			.param("password", "password")
-    			.param("matchedPassword", "password"))
+    			.param("matchingPassword", "password"))
     		.andExpect(status().isOk())	// 200 but errors in body
     		.andExpect(content().string(containsString(errorMessage)));
     }
@@ -102,7 +102,7 @@ public class RegisterTest {
     			.param("surname", "  ")
     			.param("email", "email@provider.com")
     			.param("password", "password")
-    			.param("matchedPassword", "password"))
+    			.param("matchingPassword", "password"))
     		.andExpect(status().isOk())	// 200 but errors in body
     		.andExpect(content().string(containsString(errorMessage)));
     }
@@ -116,7 +116,7 @@ public class RegisterTest {
     			.param("firstName", "firstName")
     			.param("surname", "surname")
     			.param("password", "password")
-    			.param("matchedPassword", "password"))
+    			.param("matchingPassword", "password"))
     		.andExpect(status().isOk())	// 200 but errors in body
     		.andExpect(content().string(containsString(errorMessage)));
     }
@@ -131,7 +131,7 @@ public class RegisterTest {
     			.param("surname", "surname")
     			.param("email", "email invalid")
     			.param("password", "password")
-    			.param("matchedPassword", "password"))
+    			.param("matchingPassword", "password"))
     		.andExpect(status().isOk())	// 200 but errors in body
     		.andExpect(content().string(containsString(errorMessage)));
     }
@@ -143,17 +143,15 @@ public class RegisterTest {
     }
     
     @Test
-    @Ignore("Implementation not complete")
     public void testUnmatchingPasswords() throws Exception {
     	String errorMessage = messageSource.getMessage("register.error.password.different", null, Locale.UK);
-    	// TODO: check once implementation is ready
     	mockMvc.perform(post("/register")
     			.with(csrf())
     			.param("firstName", "firstName")
     			.param("surname", "surname")
     			.param("email", "email@provider.com")
     			.param("password", "password")
-    			.param("matchedPassword", "different password"))
+    			.param("matchingPassword", "different password"))
     		.andExpect(status().isOk())	// 200 but errors in body
     		.andExpect(content().string(containsString(errorMessage)));
     }

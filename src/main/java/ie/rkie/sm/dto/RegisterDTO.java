@@ -1,10 +1,12 @@
 package ie.rkie.sm.dto;
 
+import ie.rkie.sm.validation.PasswordMatches;
 import ie.rkie.sm.validation.ValidEmail;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
+@PasswordMatches
 public class RegisterDTO {
 
 	@NotBlank

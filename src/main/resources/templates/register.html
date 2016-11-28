@@ -41,6 +41,9 @@
 								<input id="email" type="email" th:field="*{email}" class="form-control" name="email" value="" placeholder="Email" tabindex="3"/>
 							</div>
 							<br />
+							<div class="alert alert-danger" th:if="${#fields.hasErrors('password')}">
+								<p th:text="#{register.error.password.different}"></p>
+							</div>
 							<div class="form-group">
 								<input id="password" type="password" th:field="*{password}" class="form-control" name="password" value="" placeholder="Password" tabindex="4"/>
 							</div>

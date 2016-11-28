@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,8 +26,11 @@ public class RegisterController {
 	
 	@RequestMapping(method = RequestMethod.POST)
 	public String register(@ModelAttribute("register") @Valid RegisterDTO registerDTO,
-			Errors errors) {
+			Errors errors, BindingResult result) {
 		if ( errors.hasErrors() ) {
+			if ( errors.getGlobalErrors().size() > 0 ) {
+				result.rejectValue("password", "password");
+			}
 			return "register";
 		}
 		return "redirect:/home";
