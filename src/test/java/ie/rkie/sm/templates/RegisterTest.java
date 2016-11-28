@@ -3,6 +3,7 @@ package ie.rkie.sm.templates;
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
@@ -18,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.MessageSource;
+import org.springframework.security.test.context.support.WithAnonymousUser;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -43,6 +46,22 @@ public class RegisterTest {
 				.webAppContextSetup(context)
 				.apply(springSecurity())
 				.build();
+    }
+    
+    @Test
+    @WithMockUser
+    public void testLoggedInUserShouldNotSeeRegisterPage() throws Exception {
+    	mockMvc.perform(get("/register"))
+    		.andExpect(status().isOk())
+    		.andExpect(content().string(containsString("Please log out before registering.")));
+    }
+    
+    @Test
+    @WithAnonymousUser
+    public void testRegisterPage() throws Exception {
+    	mockMvc.perform(get("/register"))
+    		.andExpect(status().isOk())
+    		.andExpect(content().string(containsString("<h1>Register</h1>")));
     }
     
     @Test

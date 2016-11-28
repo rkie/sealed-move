@@ -11,14 +11,12 @@
 			/>
 	</head>
 	<body>
-		<nav class="navbar navbar-default">
-			<div class="container-fluid">
-				<div class="navbar-header" th:replace="fragments :: nav-brand">
-					<a class="navbar-brand" href="/">Brand</a>
-				</div>
+		<div class="container-fluid">
+			<div class="navbar-header" th:replace="fragments :: nav-bar">
+				<a class="navbar-brand" href="/">Brand</a>
 			</div>
-		</nav>
-		<div class="container">
+		</div>
+		<div class="container" sec:authorize="isAnonymous()">
 			<form th:action="@{/register}" name="f" th:object="${register}" method="post">
 				<div class="panel-body">
 					<div class="row">
@@ -55,6 +53,10 @@
 					</div>
 				</div>
 			</form>
+		</div>
+		<div class="container" sec:authorize="isAuthenticated()">
+			<h1>Already logged in</h1>
+			<p>Please log out before registering.</p>
 		</div>
 		<script th:src="@{/resources/js/jquery-1.11.2.min.js}" src="../../webapp/resources/js/jquery-1.11.2.min.js"></script>
 		<script th:src="@{/resources/js/bootstrap.min.js}" src="../../webapp/resources/js/bootstrap.min.js"></script>
