@@ -3,6 +3,7 @@ package ie.rkie.sm.controller;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -20,6 +21,19 @@ public class MvcAdapter extends WebMvcConfigurerAdapter {
 		ResourceBundleMessageSource source = new ResourceBundleMessageSource();
 		source.setBasename("Messages");
 		return source;
+	}
+	
+	/**
+	 * Allows the message source to be employed so that validation messages 
+	 * in the dto can reference the property file. Note this needs to be 
+	 * injected into the controller.
+	 * @return
+	 */
+	@Bean(name="validator")
+	public LocalValidatorFactoryBean localValidatorFactoryBean() {
+		LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
+		localValidatorFactoryBean.setValidationMessageSource(messageSource());
+		return localValidatorFactoryBean;
 	}
 
 	/**

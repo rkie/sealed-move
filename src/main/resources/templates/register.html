@@ -23,26 +23,26 @@
 						<div class="col-md-6 col-md-offset-3">
 							<h1>Register</h1>
 							<div class="alert alert-danger" th:if="${#fields.hasErrors('firstName')}">
-								<p th:text="#{register.error.first.name}"></p>
+								<p th:text="${#fields.errors('firstName')[0]}" />
 							</div>
 							<div class="form-group">
 								<input id="firstName" type="text" th:field="*{firstName}" th:errorclass="fieldError" class="form-control" name="firstName" value="" placeholder="First name" tabindex="1" />
 							</div>
 							<div class="alert alert-danger" th:if="${#fields.hasErrors('surname')}">
-								<p th:text="#{register.error.surname}"></p>
+								<p th:text="${#fields.errors('surname')[0]}" />
 							</div>
 							<div class="form-group">
 								<input id="surname" type="text" th:field="*{surname}" class="form-control" name="surname" value="" placeholder="Surname" tabindex="2"/>
 							</div>
 							<div class="alert alert-danger" th:if="${#fields.hasErrors('email')}">
-								<p th:text="#{register.error.email}"></p>
+								<p th:text="${#fields.errors('email')[0]}" />
 							</div>
 							<div class="form-group">
 								<input id="email" type="email" th:field="*{email}" class="form-control" name="email" value="" placeholder="Email" tabindex="3"/>
 							</div>
 							<br />
 							<div class="alert alert-danger" th:if="${#fields.hasErrors('password')}">
-								<p th:text="#{register.error.password.different}"></p>
+								<p th:utext="${#fields.errors('password')[0]}" />
 							</div>
 							<div class="form-group">
 								<input id="password" type="password" th:field="*{password}" class="form-control" name="password" value="" placeholder="Password" tabindex="4"/>

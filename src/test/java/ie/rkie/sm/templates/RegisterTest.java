@@ -155,5 +155,19 @@ public class RegisterTest {
     		.andExpect(status().isOk())	// 200 but errors in body
     		.andExpect(content().string(containsString(errorMessage)));
     }
+    
+    @Test
+    public void testShortPasswords() throws Exception {
+    	String errorMessage = messageSource.getMessage("register.error.password.short", null, Locale.UK);
+    	mockMvc.perform(post("/register")
+    			.with(csrf())
+    			.param("firstName", "firstName")
+    			.param("surname", "surname")
+    			.param("email", "email@provider.com")
+    			.param("password", "pass")
+    			.param("matchingPassword", "pass"))
+    		.andExpect(status().isOk())	// 200 but errors in body
+    		.andExpect(content().string(containsString(errorMessage)));
+    }
 
 }
