@@ -1,6 +1,7 @@
 package ie.rkie.sm.controller;
 
 import ie.rkie.sm.dto.RegisterDTO;
+import ie.rkie.sm.service.RegistrationService;
 
 import javax.validation.Valid;
 
@@ -32,6 +33,9 @@ public class RegisterController {
 	  binder.setValidator(validator);
 	}
 	
+	@Autowired
+	private RegistrationService registrationService;
+	
 	@RequestMapping(method = RequestMethod.GET)
 	public String registerForm(Model model) {
 		RegisterDTO register = new RegisterDTO();
@@ -49,6 +53,19 @@ public class RegisterController {
 			}
 			return "register";
 		}
+		
+		if ( registrationService.emailExists(registerDTO.getEmail()) ) {
+			result.rejectValue("email", "register.error.email.exists");
+			return "register";
+		}
+		
+		if ( registrationService.usernameExists(registerDTO.getUsername()) ) {
+			result.rejectValue("username", "register.error.username.exists");
+			return "register";
+		}
+		
+		registrationService.registerNewUser(registerDTO);
+		
 		return "redirect:/home";
 	}
 }

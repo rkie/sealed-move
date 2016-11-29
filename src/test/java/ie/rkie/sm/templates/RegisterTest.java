@@ -12,7 +12,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.Locale;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -137,9 +136,31 @@ public class RegisterTest {
     }
     
     @Test
-    @Ignore("Implementation not complete")
-    public void testEmailAlreadyExists() {
-    	// TODO: Implement this test
+    public void testEmailAlreadyExists() throws Exception {
+    	String errorMessage = messageSource.getMessage("register.error.email.exists", null, Locale.UK);
+    	mockMvc.perform(post("/register")
+		    	.with(csrf())
+				.param("firstName", "firstName")
+				.param("username", "username")
+				.param("email", "bob@test.com")
+				.param("password", "password")
+				.param("matchingPassword", "password"))
+			.andExpect(status().isOk())
+			.andExpect(content().string(containsString(errorMessage)));
+    }
+    
+    @Test
+    public void testUsernameAlreadyExists() throws Exception {
+    	String errorMessage = messageSource.getMessage("register.error.username.exists", null, Locale.UK);
+    	mockMvc.perform(post("/register")
+		    	.with(csrf())
+				.param("firstName", "firstName")
+				.param("username", "bob")
+				.param("email", "valid@new.email")
+				.param("password", "password")
+				.param("matchingPassword", "password"))
+			.andExpect(status().isOk())
+			.andExpect(content().string(containsString(errorMessage)));
     }
     
     @Test
