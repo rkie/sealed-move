@@ -18,13 +18,13 @@
 				</div>
 			</div>
 		</nav>
-		<div class="container">
+		<div class="container" sec:authorize="isAnonymous()">
 			<form th:action="@{/login}" name="f" method="post">
 				<div class="panel-body">
 					<div class="row">
 						<div class="col-md-6 col-md-offset-3">
 							<h1>Login</h1>
-							<p th:if="${param.error}">Wrong user or password</p>
+							<p th:if="${param.error}" th:text="#{login.error}"></p>
 							<p th:if="${param.logout}">You have been logged out</p>
 							<div class="form-group">
 								<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
@@ -42,6 +42,14 @@
 						</div>
 					</div>
 				</div>
+			</form>
+		</div>
+		<div class="container" sec:authorize="isAuthenticated()">
+			<h1>Already logged in</h1>
+			<p>Please <a href="javascript: document.logoutForm.submit()"> log out</a> before changing account.</p>
+			<form name="logoutForm" method="POST" action="/logout" hidden="hidden">
+				<input type="submit" value="Logout" hidden="hidden" />
+				<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
 			</form>
 		</div>
 		<script th:src="@{/resources/js/jquery-1.11.2.min.js}" src="../../webapp/resources/js/jquery-1.11.2.min.js"></script>

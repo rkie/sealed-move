@@ -53,7 +53,7 @@ public class RegisterTest {
     public void testLoggedInUserShouldNotSeeRegisterPage() throws Exception {
     	mockMvc.perform(get("/register"))
     		.andExpect(status().isOk())
-    		.andExpect(content().string(containsString("Please log out before registering.")));
+    		.andExpect(content().string(containsString("Please <a href=\"javascript: document.logoutForm.submit()\" role=\"menuitem\"> log out</a> before registering.")));
     }
     
     @Test

@@ -37,7 +37,8 @@
 								<a href="javascript: document.logoutForm.submit()" role="menuitem"> Logout</a>
 								<form name="logoutForm" method="POST" action="/logout" hidden="hidden">
 									<input type="submit" value="Logout" hidden="hidden" />
-								<input type="hidden" name="_csrf" value="880babb0-79ae-4094-9f45-c6a23293b39c" /></form>
+									<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+								</form>
 							</li>
 						</ul>
 					</div>
