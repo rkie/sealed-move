@@ -69,7 +69,7 @@ public class RegisterTest {
     	mockMvc.perform(post("/register")
     			.with(csrf())
     			.param("firstName", "firstName")
-    			.param("surname", "surname")
+    			.param("username", "username")
     			.param("email", "email@provider.com")
     			.param("password", "password")
     			.param("matchingPassword", "password"))
@@ -84,7 +84,7 @@ public class RegisterTest {
     	mockMvc.perform(post("/register")
     			.with(csrf())
     			.param("firstName", "")
-    			.param("surname", "surname")
+    			.param("username", "username")
     			.param("email", "email@provider.com")
     			.param("password", "password")
     			.param("matchingPassword", "password"))
@@ -94,12 +94,12 @@ public class RegisterTest {
     
     @Test
     public void testBlankSurame() throws Exception {
-    	String errorMessage = messageSource.getMessage("register.error.surname", null, Locale.UK);
+    	String errorMessage = messageSource.getMessage("register.error.username", null, Locale.UK);
     	
     	mockMvc.perform(post("/register")
     			.with(csrf())
     			.param("firstName", "firstName")
-    			.param("surname", "  ")
+    			.param("username", "  ")
     			.param("email", "email@provider.com")
     			.param("password", "password")
     			.param("matchingPassword", "password"))
@@ -114,7 +114,7 @@ public class RegisterTest {
     	mockMvc.perform(post("/register")
     			.with(csrf())
     			.param("firstName", "firstName")
-    			.param("surname", "surname")
+    			.param("username", "username")
     			.param("password", "password")
     			.param("matchingPassword", "password"))
     		.andExpect(status().isOk())	// 200 but errors in body
@@ -128,7 +128,7 @@ public class RegisterTest {
     	mockMvc.perform(post("/register")
     			.with(csrf())
     			.param("firstName", "firstName")
-    			.param("surname", "surname")
+    			.param("username", "username")
     			.param("email", "email invalid")
     			.param("password", "password")
     			.param("matchingPassword", "password"))
@@ -148,7 +148,7 @@ public class RegisterTest {
     	mockMvc.perform(post("/register")
     			.with(csrf())
     			.param("firstName", "firstName")
-    			.param("surname", "surname")
+    			.param("username", "username")
     			.param("email", "email@provider.com")
     			.param("password", "password")
     			.param("matchingPassword", "different password"))
@@ -162,7 +162,7 @@ public class RegisterTest {
     	mockMvc.perform(post("/register")
     			.with(csrf())
     			.param("firstName", "firstName")
-    			.param("surname", "surname")
+    			.param("username", "username")
     			.param("email", "email@provider.com")
     			.param("password", "pass")
     			.param("matchingPassword", "pass"))
