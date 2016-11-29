@@ -8,3 +8,12 @@ values (
 
 INSERT INTO authorities
 VALUES (1, 'bob', 'ROLE_USER');
+
+
+INSERT INTO game_status VALUES ('SETUP');
+INSERT INTO game_status VALUES ('ACTIVE');
+INSERT INTO game_status VALUES ('FINISHED');
+
+insert into game_type (name, min_players, max_players) VALUES ('Chess', 2, 2);
+insert into game_type (name, min_players, max_players) VALUES ('Draughts', 2, 2);
+insert into game_type (name, min_players, max_players) VALUES ('Snakes and Ladders', 2, 4);
