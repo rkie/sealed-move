@@ -9,7 +9,7 @@ import ie.rkie.sm.dto.RegisterDTO;
 public interface RegistrationService {
 
 	/**
-	 * Register a new user.
+	 * Register a new user with the default role of USER.
 	 * @param dto
 	 */
 	void registerNewUser(RegisterDTO dto);

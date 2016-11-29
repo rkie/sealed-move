@@ -40,4 +40,12 @@ public class Authority implements GrantedAuthority {
 	public void setAuthority(String authority) {
 		this.authority = authority;
 	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 }

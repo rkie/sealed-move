@@ -6,7 +6,7 @@ create table users(
       first_name varchar(50));
 
 create table authorities (
-  	  id int not null,
+  	  id int identity not null,
       username varchar_ignorecase(50) not null,
       authority varchar_ignorecase(50) not null,
       constraint fk_authorities_users foreign key(username) references users(username));

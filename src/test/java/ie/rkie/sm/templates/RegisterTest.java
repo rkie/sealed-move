@@ -1,6 +1,7 @@
 package ie.rkie.sm.templates;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.junit.Assert.assertEquals;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -8,7 +9,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import ie.rkie.sm.db.User;
+import ie.rkie.sm.db.UserDao;
 
+import java.util.List;
 import java.util.Locale;
 
 import org.junit.Before;
@@ -18,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.MessageSource;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -37,6 +42,9 @@ public class RegisterTest {
     
     @Autowired
     private MessageSource messageSource;
+    
+    @Autowired
+    private UserDao userDao;
 
     
     @Before
@@ -65,15 +73,31 @@ public class RegisterTest {
     
     @Test
     public void testValidRegistration() throws Exception {
+    	final String firstName = "firstName";
+    	final String username = "username";
+    	final String email = "email@provider.com";
     	mockMvc.perform(post("/register")
     			.with(csrf())
-    			.param("firstName", "firstName")
-    			.param("username", "username")
-    			.param("email", "email@provider.com")
+    			.param("firstName", firstName)
+    			.param("username", username)
+    			.param("email", email)
     			.param("password", "password")
     			.param("matchingPassword", "password"))
     		.andExpect(status().isFound())	// 302 redirect
     		.andExpect(redirectedUrl("/home"));
+    	
+    	// TODO: should now be logged in.
+    	
+    	// verify new user created
+    	List<User> users = userDao.findByEmail(email);
+    	assertEquals("Expected the user to be created", 1, users.size());
+    	User user = users.get(0);
+    	assertEquals("Wrong first name", firstName, user.getFirstName());
+    	assertEquals("Wrong username", username, user.getUsername());
+    	assertEquals("Wrong email", email, user.getEmail());
+    	assertEquals("Should have 1 authority", 1, user.getAuthorities().size());
+    	GrantedAuthority auth = user.getAuthorities().iterator().next();
+    	assertEquals("Wrong authority", "ROLE_USER", auth.getAuthority());
     }
     
     @Test

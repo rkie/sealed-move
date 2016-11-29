@@ -1,7 +1,9 @@
 package ie.rkie.sm.db;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -40,11 +42,12 @@ public class User implements UserDetails {
 	@NotNull
 	private String password;
 	
-	@OneToMany(mappedBy="username", fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="username", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	private Collection<Authority> authorities;
 
 	public User() {
 		super();
+		this.authorities = new ArrayList<Authority>();
 	}
 
 	public User(String email, String username) {
@@ -96,6 +99,10 @@ public class User implements UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return authorities;
+	}
+	
+	public void addAuthority(Authority authority) {
+		authorities.add(authority);
 	}
 
 	@Override
