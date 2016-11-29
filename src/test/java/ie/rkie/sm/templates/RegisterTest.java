@@ -86,7 +86,7 @@ public class RegisterTest {
     		.andExpect(status().isFound())	// 302 redirect
     		.andExpect(redirectedUrl("/home"));
     	
-    	// TODO: should now be logged in.
+    	// TODO: Add check to ensure user gets logged in. Does not seem possible to check because of redirect.
     	
     	// verify new user created
     	List<User> users = userDao.findByEmail(email);
