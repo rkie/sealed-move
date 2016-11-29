@@ -26,7 +26,7 @@
 				
 				<div sec:authorize="isAuthenticated()" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav pull-right">
-						<li class=" dropdown"><a href="#" class="dropdown-toggle active" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" th:inline="text">Signed in as [[${#httpServletRequest.remoteUser}]] <span class="caret"></span></a>
+						<li class=" dropdown"><a href="#" class="dropdown-toggle active" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" th:inline="text">Signed in as <span sec:authentication="principal.firstName">Firstname</span> <span class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<li><a href="#">Change Password</a></li>
 								<li><a href="#">My Profile</a></li>

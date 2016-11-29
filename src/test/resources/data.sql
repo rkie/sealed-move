@@ -1,5 +1,10 @@
 INSERT INTO users 
-values ('bob@test.com', '$2a$10$TSuuMxi6iciko3F2TTAWCeBoEP7IMQfODOYyopk6Sbh0VLI//c98S', 1);
+values (
+	'bob',
+	'$2a$10$TSuuMxi6iciko3F2TTAWCeBoEP7IMQfODOYyopk6Sbh0VLI//c98S',
+	1,
+	'bob@test.com',
+	'Robert');
 
 INSERT INTO authorities
-VALUES ('bob@test.com', 'ROLE_USER');
+VALUES (1, 'bob', 'ROLE_USER');

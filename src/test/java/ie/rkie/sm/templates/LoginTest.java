@@ -58,7 +58,7 @@ public class LoginTest {
 	public void testValidLogin() throws Exception {
 		mockMvc.perform(post("/login")
     			.with(csrf())
-    			.param("username", "bob@test.com")
+    			.param("username", "bob")
     			.param("password", "bobspassword"))
     		.andExpect(status().isFound())	// 302 redirect
     		.andExpect(redirectedUrl("/"));

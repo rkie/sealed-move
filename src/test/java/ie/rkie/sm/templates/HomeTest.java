@@ -7,6 +7,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import javax.transaction.Transactional;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithAnonymousUser;
-import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -49,13 +51,19 @@ public class HomeTest {
             .andExpect(content().string(not(containsString("Signed in as"))));
     }
     
+    /**
+     * Using {@link WithUserDetails} here takes the data from the test DB. This
+     * means that the first name will be Robert and not just the username, bob.
+     * @throws Exception
+     */
     @Test
-    @WithMockUser(username="Bill")
+    @WithUserDetails(value="bob", userDetailsServiceBeanName="userDetailsService")
+    @Transactional
     public void testLoggedInHome() throws Exception {
         mockMvc.perform(get("/"))
             .andExpect(status().isOk())
             .andExpect(content().string(containsString("Welcome to the Sealed Move site")))
-            .andExpect(content().string(containsString("Signed in as Bill")))
+            .andExpect(content().string(containsString("Signed in as <span>Robert</span>")))
             .andExpect(content().string(not(containsString("<button type=\"submit\" class=\"btn btn-primary\">Login</button>"))));
     }
 }

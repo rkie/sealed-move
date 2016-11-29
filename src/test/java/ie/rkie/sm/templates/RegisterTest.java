@@ -20,7 +20,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.MessageSource;
 import org.springframework.security.test.context.support.WithAnonymousUser;
-import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -49,7 +49,7 @@ public class RegisterTest {
     }
     
     @Test
-    @WithMockUser
+    @WithUserDetails(value="bob", userDetailsServiceBeanName="userDetailsService")
     public void testLoggedInUserShouldNotSeeRegisterPage() throws Exception {
     	mockMvc.perform(get("/register"))
     		.andExpect(status().isOk())

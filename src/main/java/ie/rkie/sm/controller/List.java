@@ -1,7 +1,7 @@
 package ie.rkie.sm.controller;
 
-import ie.rkie.sm.db.Player;
-import ie.rkie.sm.db.PlayerDao;
+import ie.rkie.sm.db.User;
+import ie.rkie.sm.db.UserDao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class List {
 	
 	@Autowired
-	private PlayerDao userDao;
+	private UserDao userDao;
 	
 	/**
 	 * Returns a list of all users and their email.
@@ -32,7 +32,7 @@ public class List {
 	public String listUsers() {
 		System.out.println("Got this far");
 		StringBuilder builder = new StringBuilder("<html><body><ol>");
-		for ( Player user : userDao.findAll() ) {
+		for ( User user : userDao.findAll() ) {
 			builder.append("<li>").append(user.getUsername()).append(": ").append(user.getEmail()).append("</li>");
 		}
 		builder.append("</ol>");
