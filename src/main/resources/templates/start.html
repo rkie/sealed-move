@@ -47,11 +47,41 @@
 		</div>
 		<div class="container">
 			<h1>You can start a new game here</h1>
-		</div>
+			
+			<ul class="nav nav-tabs">
+				<li class="active"><a data-toggle="tab" href="#instructions">Instructions</a></li>
+				<li th:each="game : ${games}">
+					<a data-toggle="tab" th:href="'#' + ${game.name}" th:text="${game.displayName}" href="#game1">Game 1</a>
+				</li>
+				<li th:remove="all"><a data-togle="tab" href="#game2">Game 2</a></li>
+				<li th:remove="all"><a data-togle="tab" href="#game3">Game 3</a></li>
+			</ul>
+			<div class="panel-body">
+				<div class="tab-content">
+					<div id="instructions" class="tab-pane fade in active">
+						<h3>Instructions</h3>
+						<p>Please select a game tab, enter the options and click start</p>
+					</div>
+					<div th:each="game : ${games}" th:id="${game.name}" class="tab-pane fade" id="game1">
+						<h3 th:text="${game.displayName}">Game 1</h3>
+						<p>This game must have a minimum of <span th:text="${game.minPlayers}">2</span> players
+						and a maximum of <span th:text="${game.maxPlayers}">2</span></p>
+					</div>
+					<!-- TODO - these prototypes won't work!! -->
+					<div id="game2" th:remove="all" class="tab-pane fade">
+						<h3>Game 2</h3><p>Dummy data for prototype</p>
+					</div>
+					<div id="game3" th:remove="all" class="tab-pane fade">
+						<h3>Game 3</h3><p>Dummy data for prototype</p>
+					</div>
+				</div>
+			</div>
 		
-		<div><a href="/home">Home</a></div>
-		<div>
-			<a href="javascript: document.logoutForm.submit()" role="menuitem"> Logout</a>
+			<div><a href="/home">Home</a></div>
+			<div>
+				<a href="javascript: document.logoutForm.submit()" role="menuitem"> Logout</a>
+			</div>
+			
 		</div>
 		<script th:src="@{/resources/js/jquery-1.11.2.min.js}" src="../../webapp/resources/js/jquery-1.11.2.min.js"></script>
 		<script th:src="@{/resources/js/bootstrap.min.js}" src="../../webapp/resources/js/bootstrap.min.js"></script>
