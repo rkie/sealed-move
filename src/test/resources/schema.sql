@@ -48,10 +48,18 @@ CREATE TABLE players
 	constraint fk_players_games foreign key(gid) references games(gid)
 );
 
-CREATE TABLE move
+CREATE TABLE moves
 (
 	mid INT identity PRIMARY KEY,
 	pid INT,
 	move VARCHAR(100),
 	constraint fk_move_players foreign key(pid) references players(id)
+);
+
+CREATE TABLE join_tokens
+(
+	id INT identity PRIMARY KEY,
+	gid INT,
+	token VARCHAR(100),
+	constraint fk_tokens_games foreign key(gid) references games(gid)
 );

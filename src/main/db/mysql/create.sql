@@ -31,6 +31,8 @@ create unique index ix_auth_username on authorities (username,authority);
 
 
 
+
+DROP TABLE if exists join_tokens;
 DROP TABLE if exists moves;
 DROP TABLE if exists players ;
 DROP TABLE if exists games ;
@@ -87,4 +89,12 @@ CREATE TABLE moves
 	pid INT,
 	move VARCHAR(100),
 	constraint fk_move_players foreign key(pid) references players(id)
+);
+
+CREATE TABLE join_tokens
+(
+	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	gid INT,
+	token VARCHAR(100),
+	constraint fk_tokens_games foreign key(gid) references games(gid)
 );
