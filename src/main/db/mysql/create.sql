@@ -50,13 +50,14 @@ CREATE TABLE game_type
 (
 	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	name varchar(20),
+	display_name varchar(50),
 	min_players smallint,
 	max_players smallint
 );
 
-insert into game_type (name, min_players, max_players) VALUES ('Chess', 2, 2);
-insert into game_type (name, min_players, max_players) VALUES ('Draughts', 2, 2);
-insert into game_type (name, min_players, max_players) VALUES ('Snakes and Ladders', 2, 4);
+insert into game_type (name, display_name, min_players, max_players) VALUES ('chess', 'Chess', 2, 2);
+insert into game_type (name, display_name, min_players, max_players) VALUES ('draughts', 'Draughts', 2, 2);
+insert into game_type (name, display_name, min_players, max_players) VALUES ('snakes', 'Snakes and Ladders', 2, 4);
 
 
 CREATE TABLE games 

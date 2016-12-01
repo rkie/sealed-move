@@ -22,6 +22,7 @@ CREATE TABLE game_type
 (
 	id INT identity PRIMARY KEY,
 	name varchar(20),
+	display_name varchar(50),
 	min_players smallint,
 	max_players smallint
 );

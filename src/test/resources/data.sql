@@ -14,6 +14,6 @@ INSERT INTO game_status VALUES ('SETUP');
 INSERT INTO game_status VALUES ('ACTIVE');
 INSERT INTO game_status VALUES ('FINISHED');
 
-insert into game_type (name, min_players, max_players) VALUES ('Chess', 2, 2);
-insert into game_type (name, min_players, max_players) VALUES ('Draughts', 2, 2);
-insert into game_type (name, min_players, max_players) VALUES ('Snakes and Ladders', 2, 4);
+insert into game_type (name, display_name, min_players, max_players) VALUES ('chess', 'Chess', 2, 2);
+insert into game_type (name, display_name, min_players, max_players) VALUES ('draughts', 'Draughts', 2, 2);
+insert into game_type (name, display_name, min_players, max_players) VALUES ('snakes', 'Snakes and Ladders', 2, 4);

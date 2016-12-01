@@ -1,10 +1,11 @@
 package ie.rkie.sm.controller;
 
 import ie.rkie.sm.dto.GameSelectionDTO;
+import ie.rkie.sm.service.GameService;
 
-import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,14 +21,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping(value="/start")
 public class StartController {
 	
+	@Autowired
+	private GameService gameService;
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String startGame(Model model) {
-		// TODO: Load from data base
-		GameSelectionDTO chess = new GameSelectionDTO("chess", "Chess", 2, 2);
-		GameSelectionDTO draughts = new GameSelectionDTO("draughts", "Draughts", 2, 2);
-		GameSelectionDTO snakesAndLadders = new GameSelectionDTO("snakes", "Snakes and Ladders", 2, 4);
-		List<GameSelectionDTO> games = Arrays.asList(chess, draughts, snakesAndLadders);
+		// Load from data base
+		List<GameSelectionDTO> games = gameService.gameList();
 		model.addAttribute("games", games);
 		
 		return "/start";
