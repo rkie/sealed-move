@@ -65,4 +65,11 @@ public class GameType {
 		this.maxPlayers = maxPlayers;
 	}
 
+	@Override
+	public String toString() {
+		return String
+				.format("GameType [id=%s, \nname=%s, \ndisplayName=%s, \nminPlayers=%s, \nmaxPlayers=%s]",
+						id, name, displayName, minPlayers, maxPlayers);
+	}
+
 }

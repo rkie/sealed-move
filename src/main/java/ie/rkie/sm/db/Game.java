@@ -60,5 +60,12 @@ public class Game {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+
+	@Override
+	public String toString() {
+		return String.format(
+				"Game [gid=%s, \ngameType=%s, \nowner=%s, \nstatus=%s]", gid,
+				gameType, owner, status);
+	}
 	
 }
