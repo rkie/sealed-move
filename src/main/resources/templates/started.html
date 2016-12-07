@@ -46,37 +46,9 @@
 			</nav>
 		</div>
 		<div class="container">
-			<h1>You can start a new game here</h1>
+			<h1>You have started a game of <span th:text="${game}">game name</span>!</h1>
 			
-			<ul class="nav nav-tabs">
-				<li class="active"><a data-toggle="tab" href="#instructions">Instructions</a></li>
-				<li th:each="game : ${games}">
-					<a data-toggle="tab" th:href="'#' + ${game.name}" th:text="${game.displayName}" href="#game1">Game 1</a>
-				</li>
-				<li th:remove="all"><a data-togle="tab" href="#game2">Game 2</a></li>
-				<li th:remove="all"><a data-togle="tab" href="#game3">Game 3</a></li>
-			</ul>
-			<div class="panel-body">
-				<div class="tab-content">
-					<div id="instructions" class="tab-pane fade in active">
-						<h3>Instructions</h3>
-						<p>Please select a game tab, enter the options and click start</p>
-					</div>
-					<div th:each="game : ${games}" th:id="${game.name}" class="tab-pane fade" id="game1">
-						<h3 th:text="${game.displayName}">Game 1</h3>
-						<p>This game must have a minimum of <span th:text="${game.minPlayers}">2</span> players
-						and a maximum of <span th:text="${game.maxPlayers}">2</span></p>
-						<p>Start a game with <a href="/started.html" th:href="@{'/start/'+${game.name}+'/2/game'}">2 player game</a>.</p>
-					</div>
-					<!-- TODO - these prototypes won't work!! -->
-					<div id="game2" th:remove="all" class="tab-pane fade">
-						<h3>Game 2</h3><p>Dummy data for prototype</p>
-					</div>
-					<div id="game3" th:remove="all" class="tab-pane fade">
-						<h3>Game 3</h3><p>Dummy data for prototype</p>
-					</div>
-				</div>
-			</div>
+			<p>Send this link to invite an opponent to the game: <span th:text="${joinUrl}">Token</span></p>
 		
 			<div><a href="/home">Home</a></div>
 			<div>

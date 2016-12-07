@@ -1,13 +1,21 @@
 package ie.rkie.sm.controller;
 
+import ie.rkie.sm.db.Game;
+import ie.rkie.sm.db.GameType;
+import ie.rkie.sm.db.User;
 import ie.rkie.sm.dto.GameSelectionDTO;
 import ie.rkie.sm.service.GameService;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -31,6 +39,34 @@ public class StartController {
 		model.addAttribute("games", games);
 		
 		return "/start";
+	}
+	
+	@RequestMapping(value="{name}/game", method = RequestMethod.GET)
+	public String startGame(@PathVariable String name, Model model, HttpServletRequest request) {
+		System.out.println("Game Started");
+		return startGame(name, 2, model, request);
+	}
+	
+	@RequestMapping(value="{name}/{players}/game", method = RequestMethod.GET)
+	public String startGame(@PathVariable String name, @PathVariable int players, Model model, HttpServletRequest request) {
+		GameType gameType = gameService.fromName(name);
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User owner = (User) auth.getPrincipal();
+		Game game = gameService.startGame(gameType, players, owner);
+		String token = gameService.createToken(game);
+		model.addAttribute("token", token);
+		model.addAttribute("game", name);
+		
+		// TODO: clean up this messing with port and url....
+		int port = request.getLocalPort();
+		String portStr = "";
+		if ( port != 80 ) {
+			portStr = ":" + port;
+		}
+		String url = "http://" + request.getLocalName() + portStr + "/join?token=" + token;
+		model.addAttribute("joinUrl", url);
+		
+		return "started";
 	}
 	
 }
