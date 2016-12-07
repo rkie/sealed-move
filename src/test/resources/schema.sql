@@ -1,3 +1,12 @@
+drop table if exists join_tokens;
+drop table if exists moves;
+drop table if exists players;
+drop table if exists games;
+drop table if exists game_type;
+drop table if exists game_status;
+drop table if exists authorities;
+drop table if exists users;
+
 create table users(
       username varchar_ignorecase(50) not null primary key,
       password varchar_ignorecase(60) not null,
