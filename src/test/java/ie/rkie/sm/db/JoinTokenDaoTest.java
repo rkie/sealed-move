@@ -26,7 +26,7 @@ public class JoinTokenDaoTest {
 	
 	@Test
 	public void testFindByToken() {
-		List<JoinToken> tokens = dao.findByToken("UNIQUE GAME ENTRY TOKEN");
+		List<JoinToken> tokens = dao.findByToken("UNIQUE_GAME_ENTRY_TOKEN");
 		assertThat(tokens, hasSize(1));
 	}
 	
@@ -38,7 +38,7 @@ public class JoinTokenDaoTest {
 	
 	@Test
 	public void testWalkToGame() {
-		List<JoinToken> tokens = dao.findByToken("UNIQUE GAME ENTRY TOKEN");
+		List<JoinToken> tokens = dao.findByToken("UNIQUE_GAME_ENTRY_TOKEN");
 		assertThat(tokens, hasSize(1));
 		JoinToken token = tokens.get(0);
 		Game game = token.getGame();

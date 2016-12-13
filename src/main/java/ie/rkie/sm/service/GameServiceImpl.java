@@ -72,5 +72,34 @@ public class GameServiceImpl implements GameService {
 		// TODO: need to protect against unknown games
 		return games.get(0);
 	}
+
+	/**
+	 * Convenience method to look up the game by token.
+	 * @param token
+	 * @return
+	 */
+	private Game from(String token) {
+		List<JoinToken> joinToken = joinTokenDao.findByToken(token);
+		if ( joinToken.size() == 0 ) {
+			return null;
+		}
+		return joinToken.get(0).getGame();
+	}
+
+	@Override
+	public JoinAttemptResult joinWithToken(User player, String token) {
+
+		// Check for the token to find the game
+		Game game = from(token);
+		if ( game == null ) {
+			return JoinAttemptResult.GAME_NOT_FOUND;
+		}
+		// TODO: Make sure this user has not already joined
+
+		// TODO: Make sure the game is not fully subscribed
+
+		// TODO: Add the user to the game
+		return JoinAttemptResult.SUCCESS;
+	}
 	
 }

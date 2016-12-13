@@ -16,7 +16,7 @@ public class SimpleTokenFactory implements TokenFactory {
 
 	public SimpleTokenFactory() {
 		super();
-		encoder = Base64.getEncoder();
+		encoder = Base64.getUrlEncoder();
 	}
 
 	@Override

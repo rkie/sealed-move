@@ -28,6 +28,6 @@ VALUES (
 
 insert into join_tokens
 (gid, token)
-SELECT gid, 'UNIQUE GAME ENTRY TOKEN'
+SELECT gid, 'UNIQUE_GAME_ENTRY_TOKEN'
 FROM games
 WHERE owner = 'bob';

@@ -17,4 +17,13 @@ public interface GameService {
 	
 	GameType fromName(String name);
 	
+	/**
+	 * Attempt to make the player join the game associated with the provided
+	 * token. There are various results possible given by the return enum.
+	 * @param player
+	 * @param token
+	 * @return
+	 */
+	JoinAttemptResult joinWithToken(User player, String token);
+
 }
