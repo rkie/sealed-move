@@ -9,7 +9,6 @@ values (
 INSERT INTO authorities
 VALUES (1, 'bob', 'ROLE_USER');
 
-
 INSERT INTO game_status VALUES ('SETUP');
 INSERT INTO game_status VALUES ('ACTIVE');
 INSERT INTO game_status VALUES ('FINISHED');
@@ -31,3 +30,9 @@ insert into join_tokens
 SELECT gid, 'UNIQUE_GAME_ENTRY_TOKEN'
 FROM games
 WHERE owner = 'bob';
+
+INSERT INTO players (gid, username, play_order)
+SELECT gid, owner, 1
+FROM games
+WHERE owner = 'bob';
+
