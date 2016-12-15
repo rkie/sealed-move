@@ -38,12 +38,12 @@ public class JoinController {
 		// get the current user
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User owner = (User) auth.getPrincipal();
-		
-		if ( gameService.joinWithToken(owner, token) == JoinAttemptResult.SUCCESS ) { 
+		JoinAttemptResult result = gameService.joinWithToken(owner, token);
+		if ( result == JoinAttemptResult.SUCCESS ) { 
 			return "joined";
 		}
 		// TODO: Figure out the correct message to return if not successful
-		String message = "join.token.not.found";
+		String message = result.getMessage();
 		model.addAttribute("errorMessage", message);
 		return "join";
 	}

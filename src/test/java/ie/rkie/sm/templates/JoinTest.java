@@ -58,13 +58,13 @@ public class JoinTest {
 	}
     
     @Test
-    @WithUserDetails(value="bob", userDetailsServiceBeanName="userDetailsService")
+    @WithUserDetails(value="dave", userDetailsServiceBeanName="userDetailsService")
 	public void testGetWithToken() throws Exception {
 		mockMvc.perform(get("/join?token=UNIQUE_GAME_ENTRY_TOKEN").with(csrf()))
 			.andExpect(status().isOk())
 			.andExpect(content().string(containsString("You have successfully joined the game.")));
 	}
-	
+
     @Test
     @WithUserDetails(value="bob", userDetailsServiceBeanName="userDetailsService")
 	public void testGetWithInvalidToken() throws Exception {
@@ -72,5 +72,21 @@ public class JoinTest {
 		.andExpect(status().isOk())
 		.andExpect(content().string(containsString("You cannot join a game with the token provided.")));
 	}
+
+    @Test
+    @WithUserDetails(value="bob", userDetailsServiceBeanName="userDetailsService")
+    public void testAlreadyJoined() throws Exception {
+		mockMvc.perform(get("/join?token=UNIQUE_GAME_ENTRY_TOKEN").with(csrf()))
+		.andExpect(status().isOk())
+		.andExpect(content().string(containsString("You have joined the game associated with that token already.")));
+    }
+
+    @Test
+    @WithUserDetails(value="tony", userDetailsServiceBeanName="userDetailsService")
+    public void testPlayerLimitReached() throws Exception {
+		mockMvc.perform(get("/join?token=UNIQUE_TOKEN_GAME_FULL").with(csrf()))
+		.andExpect(status().isOk())
+		.andExpect(content().string(containsString("There are no more players allowed in the game associated with that token")));
+    }
 	
 }

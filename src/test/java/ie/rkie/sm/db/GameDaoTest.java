@@ -1,7 +1,11 @@
 package ie.rkie.sm.db;
 
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
+
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -41,11 +45,25 @@ public class GameDaoTest {
 		game.setGameType(gameType);
 		game.setOwner(owner);
 		game.setStatus("SETUP");
+		Player player = new Player();
+		player.setGame(game);
+		player.setPlayOrder(1);
+		player.setUser(owner);
+		game.getPlayers().add(player);
 		
 		// test
 		Game saved = dao.save(game);
 		
 		assertThat(saved.getGid(), notNullValue());
+		assertThat(saved.getPlayers().size(), is(1));
+	}
+	
+	@Test
+	@Transactional
+	public void testPlayersJoin() {
+		Game game = dao.findAll().iterator().next();
+		List<Player> players = game.getPlayers();
+		assertThat(players.size(), is(not(0)));
 	}
 
 }

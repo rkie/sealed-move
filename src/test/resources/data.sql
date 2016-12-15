@@ -5,9 +5,30 @@ values (
 	1,
 	'bob@test.com',
 	'Robert');
+	
+INSERT INTO users 
+values (
+	'dave',
+	'$2a$10$TSuuMxi6iciko3F2TTAWCeBoEP7IMQfODOYyopk6Sbh0VLI//c98S',
+	1,
+	'dave@test.com',
+	'David');
+	
+INSERT INTO users 
+values (
+	'tony',
+	'$2a$10$TSuuMxi6iciko3F2TTAWCeBoEP7IMQfODOYyopk6Sbh0VLI//c98S',
+	1,
+	'tony@test.com',
+	'Anthony');
 
 INSERT INTO authorities
 VALUES (1, 'bob', 'ROLE_USER');
+INSERT INTO authorities
+VALUES (2, 'dave', 'ROLE_USER');
+INSERT INTO authorities
+VALUES (3, 'tony', 'ROLE_USER');
+
 
 INSERT INTO game_status VALUES ('SETUP');
 INSERT INTO game_status VALUES ('ACTIVE');
@@ -36,3 +57,28 @@ SELECT gid, owner, 1
 FROM games
 WHERE owner = 'bob';
 
+
+
+insert into games
+(type_id, owner, status)
+VALUES (
+	(SELECT id FROM game_type WHERE name = 'draughts'),
+	'dave',
+	'ACTIVE'
+);
+
+insert into join_tokens
+(gid, token)
+SELECT gid, 'UNIQUE_TOKEN_GAME_FULL'
+FROM games
+WHERE owner = 'dave';
+
+INSERT INTO players (gid, username, play_order)
+SELECT gid, owner, 1
+FROM games
+WHERE owner = 'dave';
+
+INSERT INTO players (gid, username, play_order)
+SELECT gid, owner, 2
+FROM games
+WHERE owner = 'dave';

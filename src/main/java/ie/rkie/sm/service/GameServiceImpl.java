@@ -6,6 +6,7 @@ import ie.rkie.sm.db.GameType;
 import ie.rkie.sm.db.GameTypeDao;
 import ie.rkie.sm.db.JoinToken;
 import ie.rkie.sm.db.JoinTokenDao;
+import ie.rkie.sm.db.Player;
 import ie.rkie.sm.db.User;
 import ie.rkie.sm.dto.GameSelectionDTO;
 
@@ -94,9 +95,19 @@ public class GameServiceImpl implements GameService {
 		if ( game == null ) {
 			return JoinAttemptResult.GAME_NOT_FOUND;
 		}
-		// TODO: Make sure this user has not already joined
+		// Make sure this user has not already joined
+		List<Player> players = game.getPlayers();
+		for ( Player existingPlayer : players ) {
+			if ( existingPlayer.getUser().getUsername().equals(player.getUsername()) ) {
+				return JoinAttemptResult.ALREADY_JOINED;
+			}
+		}
 
-		// TODO: Make sure the game is not fully subscribed
+		// Make sure the game is not fully subscribed
+		int max = game.getGameType().getMaxPlayers();
+		if ( players.size() >= max ) {
+			return JoinAttemptResult.PLAYER_LIMIT_REACHED;
+		}
 
 		// TODO: Add the user to the game
 		return JoinAttemptResult.SUCCESS;
