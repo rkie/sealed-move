@@ -37,7 +37,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 	@Override
 	public boolean usernameExists(String username) {
-		return dao.findByUsername(username).size() > 0;
+		return dao.findOne(username) != null;
 	}
 
 }

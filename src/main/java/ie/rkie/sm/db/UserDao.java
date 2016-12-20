@@ -8,9 +8,7 @@ import org.springframework.data.repository.CrudRepository;
  * Provides simple access to the underlying table.
  *
  */
-public interface UserDao extends CrudRepository<User, Long> {
-	
-	List<User> findByUsername(String username);
+public interface UserDao extends CrudRepository<User, String> {
 	
 	List<User> findByEmail(String email);
 

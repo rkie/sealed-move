@@ -1,5 +1,6 @@
 package ie.rkie.sm.db;
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
 import java.util.List;
@@ -24,8 +25,8 @@ public class UserDaoTest {
 	
 	@Test
 	public void testFindByUsername() {
-		List<User> users = dao.findByUsername("bob");
-		assertThat(users, hasSize(1));
+		User user = dao.findOne("bob");
+		assertNotNull(user);
 	}
 	
 	@Test

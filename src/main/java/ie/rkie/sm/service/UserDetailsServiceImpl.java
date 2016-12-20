@@ -3,8 +3,6 @@ package ie.rkie.sm.service;
 import ie.rkie.sm.db.User;
 import ie.rkie.sm.db.UserDao;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,11 +23,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username)
 			throws UsernameNotFoundException {
-		List<User> users = userDao.findByUsername(username);
-		if ( users.size() == 0 ) {
+		User user = userDao.findOne(username);
+		if ( user == null ) {
 			throw new UsernameNotFoundException("Username " + username + " not found");
 		}
-		User user = users.get(0);
 		return user;
 	}
 
