@@ -1,12 +1,19 @@
 package ie.rkie.sm.templates;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import ie.rkie.sm.db.Game;
+import ie.rkie.sm.db.JoinTokenDao;
+import ie.rkie.sm.db.Player;
+
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -19,6 +26,7 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 @RunWith(SpringRunner.class)
@@ -29,6 +37,9 @@ public class JoinTest {
     @Autowired
     private WebApplicationContext context;
     
+    @Autowired
+    private JoinTokenDao joinTokenDao;
+
     private MockMvc mockMvc;
     
     @Before
@@ -59,10 +70,16 @@ public class JoinTest {
     
     @Test
     @WithUserDetails(value="dave", userDetailsServiceBeanName="userDetailsService")
+    @Transactional
 	public void testGetWithToken() throws Exception {
-		mockMvc.perform(get("/join?token=UNIQUE_GAME_ENTRY_TOKEN").with(csrf()))
+    	final String token = "UNIQUE_GAME_ENTRY_TOKEN";
+		mockMvc.perform(get("/join?token=" + token).with(csrf()))
 			.andExpect(status().isOk())
 			.andExpect(content().string(containsString("You have successfully joined the game.")));
+		// verify game was joined
+		Game game = joinTokenDao.findByToken(token).get(0).getGame();
+		List<Player> players = game.getPlayers();
+		assertThat(players.size(), is(2));
 	}
 
     @Test

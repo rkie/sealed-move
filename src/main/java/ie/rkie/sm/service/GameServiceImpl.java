@@ -7,6 +7,7 @@ import ie.rkie.sm.db.GameTypeDao;
 import ie.rkie.sm.db.JoinToken;
 import ie.rkie.sm.db.JoinTokenDao;
 import ie.rkie.sm.db.Player;
+import ie.rkie.sm.db.PlayerDao;
 import ie.rkie.sm.db.User;
 import ie.rkie.sm.dto.GameSelectionDTO;
 
@@ -28,6 +29,9 @@ public class GameServiceImpl implements GameService {
 	@Autowired
 	private JoinTokenDao joinTokenDao;
 	
+	@Autowired
+	private PlayerDao playerDao;
+
 	// injectable???
 	private TokenFactory tokenFactory;
 
@@ -88,7 +92,7 @@ public class GameServiceImpl implements GameService {
 	}
 
 	@Override
-	public JoinAttemptResult joinWithToken(User player, String token) {
+	public JoinAttemptResult joinWithToken(User user, String token) {
 
 		// Check for the token to find the game
 		Game game = from(token);
@@ -98,7 +102,7 @@ public class GameServiceImpl implements GameService {
 		// Make sure this user has not already joined
 		List<Player> players = game.getPlayers();
 		for ( Player existingPlayer : players ) {
-			if ( existingPlayer.getUser().getUsername().equals(player.getUsername()) ) {
+			if ( existingPlayer.getUser().getUsername().equals(user.getUsername()) ) {
 				return JoinAttemptResult.ALREADY_JOINED;
 			}
 		}
@@ -109,7 +113,14 @@ public class GameServiceImpl implements GameService {
 			return JoinAttemptResult.PLAYER_LIMIT_REACHED;
 		}
 
-		// TODO: Add the user to the game
+		// Add the user to the game
+		Player player = new Player();
+		player.setGame(game);
+		player.setUser(user);
+		player.setPlayOrder(game.getPlayers().size() + 1);
+		player = playerDao.save(player);
+		game.getPlayers().add(player);
+		gameDao.save(game);
 		return JoinAttemptResult.SUCCESS;
 	}
 	
