@@ -46,7 +46,7 @@ public class PlayerDaoTest {
 	public void testFindByUserOne() {
 		User user = userDao.findOne("bob");
 		List<Player> players = playerDao.findByUser(user);
-		assertThat(players.size(), is(1));
+		assertThat(players.size(), is(3));
 	}
 
 	@Test

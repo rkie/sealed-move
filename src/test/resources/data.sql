@@ -38,6 +38,7 @@ insert into game_type (name, display_name, min_players, max_players) VALUES ('ch
 insert into game_type (name, display_name, min_players, max_players) VALUES ('draughts', 'Draughts', 2, 2);
 insert into game_type (name, display_name, min_players, max_players) VALUES ('snakes', 'Snakes and Ladders', 2, 4);
 
+-- Add a game that can be joined
 insert into games
 (type_id, owner, status)
 VALUES (
@@ -58,7 +59,7 @@ FROM games
 WHERE owner = 'bob';
 
 
-
+-- add a fully occupied game
 insert into games
 (type_id, owner, status)
 VALUES (
@@ -79,6 +80,24 @@ FROM games
 WHERE owner = 'dave';
 
 INSERT INTO players (gid, username, play_order)
-SELECT gid, owner, 2
+SELECT gid, 'bob', 2
 FROM games
 WHERE owner = 'dave';
+
+-- add a completed game
+INSERT INTO games (type_id, owner, status) 
+VALUES (
+	(SELECT id FROM game_type WHERE name = 'snakes'),
+	'tony',
+	'FINISHED'
+);
+
+INSERT INTO players (gid, username, play_order)
+SELECT gid, owner, 1 FROM games where owner = 'tony';
+
+INSERT INTO players (gid, username, play_order)
+SELECT gid, 'bob', 1 FROM games where owner = 'tony';
+
+INSERT INTO players (gid, username, play_order)
+SELECT gid, 'dave', 1 FROM games where owner = 'tony';
+
