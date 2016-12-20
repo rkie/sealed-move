@@ -71,12 +71,12 @@ public class StartTest {
 		MvcResult result = mockMvc.perform(get("/start/chess/game"))
 			.andExpect(status().isOk())
 			.andExpect(content().string(containsString("You have started a game of <span>chess</span>!")))
-			.andExpect(content().string(containsString("Send this link to invite an opponent to the game:")))
+			.andExpect(content().string(containsString("Send this joining link on to your opponent")))
 			.andReturn();
 		
 		// check for the token
 		String html = result.getResponse().getContentAsString();
-		Pattern pattern = Pattern.compile(".*Send this link to invite an opponent to the game: <span>.*token=(.*)<\\/span>.*");
+		Pattern pattern = Pattern.compile(".*<div class=\"panel-body\"><span>.*token=(.*)<\\/span><\\/div>.*");
 		Matcher matcher = pattern.matcher(html);
 		assertTrue("Should have found token in response", matcher.find());
 		String token = matcher.group(1);

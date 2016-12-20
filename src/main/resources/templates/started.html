@@ -48,8 +48,23 @@
 		<div class="container">
 			<h1>You have started a game of <span th:text="${game}">game name</span>!</h1>
 			
-			<p>Send this link to invite an opponent to the game: <span th:text="${joinUrl}">Token</span></p>
-		
+			<div class="hero-unit">
+				<h2>Join this game now:</h2>
+				<a class="btn btn-large btn-success" th:href="${joinUrl}" href="joined">Join Game</a>
+			</div>
+
+			<br />
+			<div class="panel panel-default">
+				<div class="panel-heading">Send this joining link on to your opponent</div>
+				<div class="panel-body"><span th:text="${joinUrl}">Token</span></div>
+			</div>
+
+			<p>You may be setting up this game for other players so that you can view the game.
+			If so just send the same link to each of the other players without joining yourself.</p>
+
+			<p>Another way to join is to use the following token: <pre th:text="${token}">token</pre></p>
+			<p>Use this on the <a href="/join">join screen</a> to join the game. This Join page is available from the
+			navigation bar once you are logged in.</p>
 			<div><a href="/home">Home</a></div>
 			<div>
 				<a href="javascript: document.logoutForm.submit()" role="menuitem"> Logout</a>
