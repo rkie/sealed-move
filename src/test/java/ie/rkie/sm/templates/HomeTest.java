@@ -66,4 +66,13 @@ public class HomeTest {
             .andExpect(content().string(containsString("Signed in as <span>Robert</span>")))
             .andExpect(content().string(not(containsString("<button type=\"submit\" class=\"btn btn-primary\">Login</button>"))));
     }
+
+    @Test
+    @WithUserDetails(value="bob", userDetailsServiceBeanName="userDetailsService")
+    public void testJoinAndStartMenuItems() throws Exception {
+        mockMvc.perform(get("/"))
+        .andExpect(status().isOk())
+        .andExpect(content().string(containsString("Start a game")))
+        .andExpect(content().string(containsString("Join a game")));
+    }
 }
