@@ -1,5 +1,6 @@
 package ie.rkie.sm.db;
 
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
@@ -64,6 +65,14 @@ public class GameDaoTest {
 		Game game = dao.findAll().iterator().next();
 		List<Player> players = game.getPlayers();
 		assertThat(players.size(), is(not(0)));
+	}
+
+	@Test
+	public void testFindByOwner() {
+		List<Game> games = dao.findByOwner(owner);
+		System.out.println(games.size());
+		assertThat(games, is(not(empty())));
+		assertThat(games.size(), is(1));
 	}
 
 }

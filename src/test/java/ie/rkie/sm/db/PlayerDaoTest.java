@@ -23,6 +23,9 @@ public class PlayerDaoTest {
 	@Autowired
 	private GameDao gameDao;
 	
+	@Autowired
+	private UserDao userDao;
+
 	@Test
 	public void testFindAll() {
 		Iterator<Player> players = playerDao.findAll().iterator();
@@ -37,6 +40,20 @@ public class PlayerDaoTest {
 		assertThat(players.size(), is(1));
 		String playerUsername = players.get(0).getUser().getUsername();
 		assertThat(playerUsername, is("bob"));
+	}
+
+	@Test
+	public void testFindByUserOne() {
+		User user = userDao.findOne("bob");
+		List<Player> players = playerDao.findByUser(user);
+		assertThat(players.size(), is(1));
+	}
+
+	@Test
+	public void testFindByUserTwo() {
+		User user = userDao.findOne("dave");
+		List<Player> players = playerDao.findByUser(user);
+		assertThat(players.size(), is(2));
 	}
 
 }

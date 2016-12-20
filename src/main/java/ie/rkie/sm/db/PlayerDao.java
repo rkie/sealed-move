@@ -8,4 +8,6 @@ public interface PlayerDao extends CrudRepository<Player, Integer> {
 	
 	List<Player> findByGame(Game game);
 
+	List<Player> findByUser(User user);
+
 }
