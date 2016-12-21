@@ -46,49 +46,55 @@
 			</nav>
 		</div>
 		<div class="container">
-			<h1>Here are the games you can view</h1>
-			
-			<div>
-				<h2>Active games you have joined</h2>
-				<table class="table table-striped table-bordered">
-					<tr>
-						<th>Game type</th>
-						<th>Players Involved</th>
-						<th>Game Status</th>
-					</tr>
-					
-					<tr th:each="game : ${games}">
-						<td th:text="${game.displayName}">Chess</td>
-						<td th:text="${game.playerList}">Bob, Dave</td>
-						<td th:text="${game.status}">In Progress</td>
-					</tr>
-					<tr th:remove="all"><td>Draughts</td><td>Bob, Tom</td><td>Setting up</td></tr>
-				</table>
+			<div th:if="${not (#lists.isEmpty(games) and #lists.isEmpty(createdGames))}">
+				<h1>Here are the games you can view</h1>
+
+				<div th:if="${not #lists.isEmpty(games)}">
+					<h2>Active games you have joined</h2>
+					<table class="table table-striped table-bordered">
+						<tr>
+							<th>Game type</th>
+							<th>Players Involved</th>
+							<th>Game Status</th>
+						</tr>
+						<tr th:each="game : ${games}">
+							<td th:text="${game.displayName}">Chess</td>
+							<td th:text="${game.playerList}">Bob, Dave</td>
+							<td th:text="${game.status}">In Progress</td>
+						</tr>
+						<tr th:remove="all"><td>Draughts</td><td>Bob, Tom</td><td>Setting up</td></tr>
+					</table>
+				</div>
+
+				<div th:if="${not #lists.isEmpty(createdGames)}">
+					<h2>Games you have created but not joined</h2>
+					<table class="table table-striped table-bordered">
+						<tr>
+							<th>Game type</th>
+							<th>Players Involved</th>
+							<th>Game Status</th>
+						</tr>
+						<tr th:each="created : ${createdGames}">
+							<td th:text="${created.displayName}">Chess</td>
+							<td th:text="${created.playerList}">Bob, Dave</td>
+							<td th:text="${created.status}">In Progress</td>
+						</tr>
+						<tr th:remove="all"><td>Draughts</td><td>Bob, Tom</td><td>Setting up</td></tr>
+					</table>
+				</div>
 			</div>
-			
-			<div>
-				<h2>Games you have created but not joined</h2>
-				<table class="table table-striped table-bordered">
-					<tr>
-						<th>Game type</th>
-						<th>Players Involved</th>
-						<th>Game Status</th>
-					</tr>
-					<tr th:each="created : ${createdGames}">
-						<td th:text="${created.displayName}">Chess</td>
-						<td th:text="${created.playerList}">Bob, Dave</td>
-						<td th:text="${created.status}">In Progress</td>
-					</tr>
-					<tr th:remove="all"><td>Draughts</td><td>Bob, Tom</td><td>Setting up</td></tr>
-				</table>
+			<div th:if="${#lists.isEmpty(games) and #lists.isEmpty(createdGames)}">
+				<h1>Could not find any active games</h1>
+				<p>You can use the menu in the navigation bar at top of this page to create
+				a new game or join a game created by someone else if you have the token.</p>
 			</div>
-			<p>You can view <a href="/historical">finished games here</a>.</p>
-			
+			<div>
+				<p>You can view <a href="/historical">finished games here</a>.</p>
+			</div>
 			<div><a href="/home">Home</a></div>
 			<div>
 				<a href="javascript: document.logoutForm.submit()"> Logout</a>
 			</div>
-			
 		</div>
 		<script th:src="@{/resources/js/jquery-1.11.2.min.js}" src="../../webapp/resources/js/jquery-1.11.2.min.js"></script>
 		<script th:src="@{/resources/js/bootstrap.min.js}" src="../../webapp/resources/js/bootstrap.min.js"></script>
