@@ -7,4 +7,6 @@ import org.springframework.data.repository.CrudRepository;
 public interface JoinTokenDao extends CrudRepository<JoinToken, Integer> {
 
 	List<JoinToken> findByToken(String token);
+
+	JoinToken findOneByGame(Game game);
 }

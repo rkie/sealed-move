@@ -1,11 +1,16 @@
 package ie.rkie.sm.controller;
 
+import ie.rkie.sm.db.Game;
+import ie.rkie.sm.db.JoinTokenDao;
 import ie.rkie.sm.db.User;
-import ie.rkie.sm.db.UserDao;
+import ie.rkie.sm.service.ListGamesService;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,33 +22,69 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 // TODO: replace/delete this class.
 @Controller
-public class List {
+public class ListController {
+
+	@Autowired
+	private ListGamesService listGamesService;
 	
 	@Autowired
-	private UserDao userDao;
+	private JoinTokenDao joinTokenDao;
 	
 	/**
-	 * Returns a list of all users and their email.
+	 * Returns a games this user is involved with.
 	 * 
 	 * @return
 	 */
 	@RequestMapping(value="/list", method=RequestMethod.GET)
 	@ResponseBody
 	public String listUsers() {
-		System.out.println("Got this far");
-		StringBuilder builder = new StringBuilder("<html><body><ol>");
-		for ( User user : userDao.findAll() ) {
-			builder.append("<li>").append(user.getUsername()).append(": ").append(user.getEmail()).append("</li>");
-		}
-		builder.append("</ol>");
-		UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		builder.append("<p>Current user: ").append(principal.getUsername()).append("</p>");
-		builder.append("<p>Authorities: ").append(principal.getAuthorities()).append("</p>");
+		StringBuilder builder = new StringBuilder("<html><body>");
 		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = (User) auth.getPrincipal();
+		builder.append("<p>Active games you created:<p>");
+		List<Game> games = listGamesService.listActiveOwnedGames(user);
+		appendGames(builder, games);
 		
+		builder.append("<p>Active games you have joined:<p>");
+		games = listGamesService.listActiveJoinedGames(user);
+		appendGames(builder, games);
 		
 		builder.append("</body></html>");
 		return builder.toString();
+	}
+
+	public void appendGames(StringBuilder builder, List<Game> games) {
+		if ( games == null || games.size() == 0 ) {
+			builder.append("No games found.<table>");
+		}
+		else {
+			builder.append("<table>");
+		}
+		for ( Game game : games ) {
+			builder.append("<tr><td>");
+			builder.append(game.getGid());
+			builder.append("</td><td>");
+			builder.append(game.getGameType().getDisplayName());
+			builder.append("</td><td>");
+			List<String> players = game.getPlayers()
+				.stream()
+				.map(player -> player.getUser())
+				.map(user -> {
+					if ( user == game.getOwner()) {
+						return "<em>" + user.getUsername() + "</em>";
+					}
+					else {
+						return user.getUsername();
+					}
+				})
+				.collect(Collectors.toList());
+			builder.append(players);
+			builder.append("</td><td>");
+			builder.append(joinTokenDao.findOneByGame(game).getToken());
+			builder.append("</td></tr>");
+		}
+		builder.append("</table>");
 	}
 
 }

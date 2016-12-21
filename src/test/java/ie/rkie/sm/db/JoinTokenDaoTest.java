@@ -24,6 +24,9 @@ public class JoinTokenDaoTest {
 	@Autowired
 	private JoinTokenDao dao;
 	
+	@Autowired
+	private GameDao gameDao;
+
 	@Test
 	public void testFindByToken() {
 		List<JoinToken> tokens = dao.findByToken("UNIQUE_GAME_ENTRY_TOKEN");
@@ -48,6 +51,14 @@ public class JoinTokenDaoTest {
 		assertThat(game.getOwner(), notNullValue());
 		assertThat(game.getOwner().getUsername(), is("bob"));
 		assertThat(game.getStatus(), is("ACTIVE"));
+	}
+
+	@Test
+	public void testFindOneByGame() {
+		Game game = gameDao.findOne(0);
+		JoinToken token = dao.findOneByGame(game);
+		assertThat(token, notNullValue());
+		assertThat(token.getToken(), is("UNIQUE_GAME_ENTRY_TOKEN"));
 	}
 
 }
