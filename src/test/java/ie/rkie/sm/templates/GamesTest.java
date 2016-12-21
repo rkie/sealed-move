@@ -2,12 +2,12 @@ package ie.rkie.sm.templates;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import javax.transaction.Transactional;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -22,15 +22,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class HomeTest {
+public class GamesTest {
 
     @Autowired
     private WebApplicationContext context;
-    
+
     private MockMvc mockMvc;
     
     @Before
@@ -43,37 +42,49 @@ public class HomeTest {
     
     @Test
     @WithAnonymousUser
-    public void testNotLoggedInHome() throws Exception {
-        mockMvc.perform(get("/"))
-            .andExpect(status().isOk())
-            .andExpect(content().string(containsString("Welcome to the Sealed Move site")))
-            .andExpect(content().string(containsString("<button type=\"submit\" class=\"btn btn-primary\">Login</button>")))
-            .andExpect(content().string(not(containsString("Signed in as"))));
+    public void testNotLoggedIn() throws Exception {
+    	mockMvc.perform(get("/games"))
+		.andExpect(status().isFound())
+		.andExpect(redirectedUrl("http://localhost/login"));
     }
     
-    /**
-     * Using {@link WithUserDetails} here takes the data from the test DB. This
-     * means that the first name will be Robert and not just the username, bob.
-     * @throws Exception
-     */
     @Test
     @WithUserDetails(value="bob", userDetailsServiceBeanName="userDetailsService")
-    @Transactional
-    public void testLoggedInHome() throws Exception {
-        mockMvc.perform(get("/"))
-            .andExpect(status().isOk())
-            .andExpect(content().string(containsString("Welcome to the Sealed Move site")))
-            .andExpect(content().string(containsString("Signed in as <span>Robert</span>")))
-            .andExpect(content().string(not(containsString("<button type=\"submit\" class=\"btn btn-primary\">Login</button>"))));
+    public void testGamesListed() throws Exception {
+		mockMvc.perform(get("/games").with(csrf()))
+		.andExpect(status().isOk())
+		.andExpect(content().string(
+				containsString("Here are the games you can view")));
+    }
+    
+    @Test
+    @WithUserDetails(value="bob", userDetailsServiceBeanName="userDetailsService")
+    public void testNoCreatedGames() throws Exception {
+		mockMvc.perform(get("/games").with(csrf()))
+		.andExpect(status().isOk())
+		.andExpect(content().string(
+				containsString("Active games you have joined")));
+    }
+    
+    @Test
+    @WithUserDetails(value="dave", userDetailsServiceBeanName="userDetailsService")
+    public void testNoJoinedGames() throws Exception {
+		mockMvc.perform(get("/games").with(csrf()))
+		.andExpect(status().isOk())
+		.andExpect(content().string(
+				containsString("Games you have created but not joined")));
+    }
+    
+    @Test
+    @WithUserDetails(value="tony", userDetailsServiceBeanName="userDetailsService")
+    public void testNoGamesAtAll() throws Exception {
+		mockMvc.perform(get("/games").with(csrf()))
+		.andExpect(status().isOk())
+		.andExpect(content().string(
+				containsString("Could not find any active games")))
+		.andExpect(content().string(not(containsString("Active games you have joined"))))
+		.andExpect(content().string(not(containsString("Games you have created but not joined"))));
+
     }
 
-    @Test
-    @WithUserDetails(value="bob", userDetailsServiceBeanName="userDetailsService")
-    public void testJoinAndStartMenuItems() throws Exception {
-        mockMvc.perform(get("/"))
-        .andExpect(status().isOk())
-        .andExpect(content().string(containsString("Start a game")))
-        .andExpect(content().string(containsString("Join a game")))
-        .andExpect(content().string(containsString("My Games")));
-    }
 }
