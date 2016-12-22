@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Sealed Move Game</title>
+		<link 
+			rel="stylesheet" 
+			href="../../webapp/resources/css/bootstrap.min.css"
+			th:href="@{/resources/css/bootstrap.min.css}" 
+			/>
+	</head>
+	<body>
+		<div th:replace="fragments :: nav-bar">
+			<!-- This is for prototyping only -->
+			<nav class="navbar navbar-default">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						</button>
+					<a class="navbar-brand" href="#">Brand</a>
+					</div>
+					
+					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+						<ul class="nav navbar-nav pull-right">
+							<li class=" dropdown"><a href="#" class="dropdown-toggle active" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Signed in as Joe <span class="caret"></span></a>
+								<ul class="dropdown-menu">
+									<li><a href="#">Change Password</a></li>
+									<li><a href="#">My Profile</a></li>
+								</ul>
+							</li>
+							<li class="">			
+								<a href="javascript: document.logoutForm.submit()" role="menuitem"> Logout</a>
+								<form name="logoutForm" method="POST" action="/logout" hidden="hidden">
+									<input type="submit" value="Logout" hidden="hidden" />
+									<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+								</form>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+		</div>
+		<div class="container">
+			<p>This game is setting up.</p>
+		</div>
+		<script th:src="@{/resources/js/jquery-1.11.2.min.js}" src="../../webapp/resources/js/jquery-1.11.2.min.js"></script>
+		<script th:src="@{/resources/js/bootstrap.min.js}" src="../../webapp/resources/js/bootstrap.min.js"></script>
+	</body>
+</html>

@@ -31,6 +31,7 @@ VALUES (3, 'tony', 'ROLE_USER');
 
 
 INSERT INTO game_status VALUES ('SETUP');
+INSERT INTO game_status VALUES ('READY');
 INSERT INTO game_status VALUES ('ACTIVE');
 INSERT INTO game_status VALUES ('FINISHED');
 
@@ -44,7 +45,7 @@ insert into games
 VALUES (
 	(SELECT id FROM game_type WHERE name = 'chess'),
 	'bob',
-	'ACTIVE'
+	'SETUP'
 );
 
 insert into join_tokens
@@ -65,7 +66,7 @@ insert into games
 VALUES (
 	(SELECT id FROM game_type WHERE name = 'draughts'),
 	'dave',
-	'ACTIVE'
+	'READY'
 );
 
 insert into join_tokens

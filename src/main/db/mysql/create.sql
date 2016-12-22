@@ -45,6 +45,7 @@ CREATE TABLE game_status
 );
 
 INSERT INTO game_status VALUES ('SETUP');
+INSERT INTO game_status VALUES ('READY');
 INSERT INTO game_status VALUES ('ACTIVE');
 INSERT INTO game_status VALUES ('FINISHED');
 

@@ -50,7 +50,7 @@ public class JoinTokenDaoTest {
 		assertThat(game.getGameType().getDisplayName(), is("Chess"));
 		assertThat(game.getOwner(), notNullValue());
 		assertThat(game.getOwner().getUsername(), is("bob"));
-		assertThat(game.getStatus(), is("ACTIVE"));
+		assertThat(game.getStatus(), is("SETUP"));
 	}
 
 	@Test
