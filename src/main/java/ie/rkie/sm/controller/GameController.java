@@ -79,6 +79,7 @@ public class GameController {
 		dto.setPlayerList(playerList);
 		dto.setStatus(game.getStatus());
 		dto.setGameId(game.getGid());
+		dto.setUrl("game?gameid=" + game.getGid());
 		return dto;
 	}
 	

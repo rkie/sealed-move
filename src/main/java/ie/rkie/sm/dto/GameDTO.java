@@ -18,6 +18,8 @@ public class GameDTO {
 	private String status;
 	
 	private Integer gameId;
+	
+	private String url;
 
 	public GameDTO(String displayName, String playerList, String status,
 			Integer gameId) {
@@ -58,6 +60,14 @@ public class GameDTO {
 
 	public void setPlayerList(String playerList) {
 		this.playerList = playerList;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 }

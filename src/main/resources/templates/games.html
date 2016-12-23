@@ -58,7 +58,7 @@
 							<th>Game Status</th>
 						</tr>
 						<tr th:each="game : ${games}">
-							<td th:text="${game.displayName}">Chess</td>
+							<td><a th:href="${game.url}" href="setup.html" th:text="${game.displayName}">Chess</a></td>
 							<td th:text="${game.playerList}">Bob, Dave</td>
 							<td th:text="${game.status}">In Progress</td>
 						</tr>
@@ -75,7 +75,7 @@
 							<th>Game Status</th>
 						</tr>
 						<tr th:each="created : ${createdGames}">
-							<td th:text="${created.displayName}">Chess</td>
+							<td><a th:href="${created.url}" href="setup.html" th:text="${created.displayName}">Chess</a></td>
 							<td th:text="${created.playerList}">Bob, Dave</td>
 							<td th:text="${created.status}">In Progress</td>
 						</tr>
