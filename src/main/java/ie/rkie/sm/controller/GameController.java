@@ -119,8 +119,11 @@ public class GameController {
 		if ( "READY".equals(game.getStatus()) ) {
 			return "ready";
 		}
-		// TODO other scenarios
-		return "";
+		if ( "ACTIVE".equals(game.getStatus()) ) {
+			return "active";
+		}
+		// safe to return finished as fall-back as no action available in that template
+		return "finished";
 	}
 
 }

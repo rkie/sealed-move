@@ -22,12 +22,22 @@ values (
 	'tony@test.com',
 	'Anthony');
 
+INSERT INTO users
+values (
+	'tom',
+	'$2a$10$TSuuMxi6iciko3F2TTAWCeBoEP7IMQfODOYyopk6Sbh0VLI//c98S',
+	1,
+	'tom@test.com',
+	'Thomas');
+
 INSERT INTO authorities
 VALUES (1, 'bob', 'ROLE_USER');
 INSERT INTO authorities
 VALUES (2, 'dave', 'ROLE_USER');
 INSERT INTO authorities
 VALUES (3, 'tony', 'ROLE_USER');
+INSERT INTO authorities
+VALUES (4, 'tom', 'ROLE_USER');
 
 
 INSERT INTO game_status VALUES ('SETUP');
@@ -102,3 +112,16 @@ SELECT gid, 'bob', 1 FROM games where owner = 'tony';
 INSERT INTO players (gid, username, play_order)
 SELECT gid, 'dave', 1 FROM games where owner = 'tony';
 
+-- Game in progress
+insert into games (type_id, owner, status)
+VALUES (
+	(SELECT id FROM game_type WHERE name = 'chess'),
+	'tom',
+	'ACTIVE'
+);
+
+INSERT INTO players (gid, username, play_order)
+SELECT gid, owner, 1 FROM games where owner = 'tom';
+
+INSERT INTO players (gid, username, play_order)
+SELECT gid, 'bob', 1 FROM games where owner = 'tom';
