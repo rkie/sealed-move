@@ -84,12 +84,15 @@ public class GameController {
 	
 	@RequestMapping(path="/game", method = RequestMethod.GET)
 	public String viewGame(@RequestParam(value="gameid", required=false) Integer gid,
-			final HttpServletResponse response) throws IOException {
+			final HttpServletResponse response,
+			Model model) throws IOException {
 		Game game = gameDao.findOne(gid);
 		if ( game == null ) {
-			response.sendError(HttpServletResponse.SC_NOT_FOUND, "Could not find that game.");
+			String message = "Could not find that game.";
+			response.sendError(HttpServletResponse.SC_NOT_FOUND, message);
+			model.addAttribute("message", message);
 			// the return to setup will not work - white label error page will take over
-			return "setup";
+			return "error";
 		}
 		// TODO: this needs a better place and some finesse
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -103,15 +106,20 @@ public class GameController {
 				}
 			}
 			if ( ! found ) {
-				response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "You do not have access to see this game.");
-				// the return to setup will not work - white label error page will take over
-				return "setup";
+				String message = "You do not have access to see this game.";
+				response.sendError(HttpServletResponse.SC_UNAUTHORIZED, message);
+				model.addAttribute("message", message);
+				return "error";
 			}
 		}
 		if ( "SETUP".equals(game.getStatus()) ) {
 			return "setup";
 		}
+		if ( "READY".equals(game.getStatus()) ) {
+			return "ready";
+		}
 		// TODO other scenarios
 		return "";
 	}
+
 }
