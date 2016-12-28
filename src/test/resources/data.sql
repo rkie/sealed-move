@@ -30,6 +30,15 @@ values (
 	'tom@test.com',
 	'Thomas');
 
+--	this guy will not be involved in any games
+INSERT INTO users
+values (
+	'ron',
+	'$2a$10$TSuuMxi6iciko3F2TTAWCeBoEP7IMQfODOYyopk6Sbh0VLI//c98S',
+	1,
+	'ron@test.com',
+	'Ronald');
+
 INSERT INTO authorities
 VALUES (1, 'bob', 'ROLE_USER');
 INSERT INTO authorities
@@ -38,6 +47,8 @@ INSERT INTO authorities
 VALUES (3, 'tony', 'ROLE_USER');
 INSERT INTO authorities
 VALUES (4, 'tom', 'ROLE_USER');
+INSERT INTO authorities
+VALUES (5, 'ron', 'ROLE_USER');
 
 
 INSERT INTO game_status VALUES ('SETUP');

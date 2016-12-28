@@ -139,6 +139,8 @@ public class GameController {
 			.collect(Collectors.toList());
 
 		model.addAttribute("games", games);
+		model.addAttribute("page", page);
+		model.addAttribute("pageNo", pageNumber);
 		return "allgames";
 	}
 

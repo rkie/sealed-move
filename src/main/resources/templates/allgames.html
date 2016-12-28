@@ -46,7 +46,7 @@
 			</nav>
 		</div>
 		<div class="container">
-			<h1>Here are all games in which you were involved including finished games:</h1>
+			<h1>Here are all the games in which you were involved including finished games:</h1>
 
 			<div th:if="${not #lists.isEmpty(games)}">
 				<h2>All games</h2>
@@ -63,6 +63,26 @@
 					</tr>
 					<tr th:remove="all"><td>Draughts</td><td>Bob, Tom</td><td>Setting up</td></tr>
 				</table>
+				<div class="table-pagination">
+				    <ul class="pagination">
+				        <li th:class="${page.number eq 0} ? 'disabled' : ''">
+				            <a th:if="${not page.first}" th:href="@{${'/allgames/'}${page.number-1}}">Previous</a>
+				            <a th:if="${page.first}" href="javascript:void(0);">Previous</a>
+				        </li>
+				        <li th:each="pageNo : ${#numbers.sequence(0, page.totalPages - 1)}" th:class="${page.number eq pageNo}? 'active' : ''">
+				            <a th:if="${page.number  eq pageNo}" href="javascript:void(0);">
+				                <span th:text="${pageNo + 1}"></span>
+				            </a>
+				            <a th:if="${not (page.number eq pageNo)}" th:href="@{${'/allgames/' + pageNo}}">
+				                <span th:text="${pageNo + 1}"></span>
+				            </a>
+				        </li>
+				        <li th:class="${page.number + 1 ge page.totalPages} ? 'disabled' : ''">
+				            <a th:if="${not page.last}" th:href="@{${'/allgames/'+ (page.number+1)}}">Next</a>
+				            <a th:if="${page.last}" href="javascript:void(0);">Next</a>
+				        </li>
+				    </ul>
+				</div>
 			</div>
 
 			<div th:if="${#lists.isEmpty(games) and #lists.isEmpty(createdGames)}">
