@@ -15,6 +15,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
@@ -75,4 +77,18 @@ public class GameDaoTest {
 		assertThat(games.size(), is(1));
 	}
 
+	@Test
+	@Transactional
+	public void testFindByOwnerUsernameOrPlayersUserUsername() {
+		List<Game> games = dao.findByOwnerUsernameOrPlayersUserUsername("bob", "bob");
+		assertThat(games.size(), is(4));
+	}
+
+	@Test
+	public void testFindByOwnerUsernameOrPlayersUserUsernamePaged() {
+
+		PageRequest pageable = new PageRequest(0, 2);
+		Page<Game> pages = dao.findByOwnerUsernameOrPlayersUserUsername(pageable, "bob", "bob");
+		assertThat(pages.getContent().size(), is(2));
+	}
 }

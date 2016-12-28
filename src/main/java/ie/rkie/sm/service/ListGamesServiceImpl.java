@@ -9,14 +9,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ListGamesServiceImpl implements ListGamesService {
 	
+	// TODO: replace with property
+	private static final int PAGESIZE = 10;
+
 	@Autowired
 	private PlayerDao playerDao;
-	
+
 	@Autowired
 	private GameDao gameDao;
 
@@ -56,6 +61,14 @@ public class ListGamesServiceImpl implements ListGamesService {
 				.filter(game -> game.getStatus().equals("FINISHED"))
 				.collect(Collectors.toList());
 		return games;
+	}
+
+	@Override
+	public Page<Game> listAllGames(User user, int pageNo) {
+		PageRequest pageable = new PageRequest(pageNo, PAGESIZE);
+		String username = user.getUsername();
+		Page<Game> page = gameDao.findByOwnerUsernameOrPlayersUserUsername(pageable, username, username);;
+		return page;
 	}
 
 }

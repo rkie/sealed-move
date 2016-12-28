@@ -3,7 +3,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<title>Sealed Move - Your Games</title>
+		<title>Sealed Move - All Games</title>
 		<link 
 			rel="stylesheet" 
 			href="../../webapp/resources/css/bootstrap.min.css"
@@ -46,50 +46,29 @@
 			</nav>
 		</div>
 		<div class="container">
-			<div th:if="${not (#lists.isEmpty(games) and #lists.isEmpty(createdGames))}">
-				<h1>Here are your active games.</h1>
+			<h1>Here are all games in which you were involved including finished games:</h1>
 
-				<div th:if="${not #lists.isEmpty(games)}">
-					<h2>Active games you have joined</h2>
-					<table class="table table-striped table-bordered">
-						<tr>
-							<th>Game type</th>
-							<th>Players Involved</th>
-							<th>Game Status</th>
-						</tr>
-						<tr th:each="game : ${games}">
-							<td><a th:href="${game.url}" href="setup.html" th:text="${game.displayName}">Chess</a></td>
-							<td th:text="${game.playerList}">Bob, Dave</td>
-							<td th:text="${game.status}">In Progress</td>
-						</tr>
-						<tr th:remove="all"><td>Draughts</td><td>Bob, Tom</td><td>Setting up</td></tr>
-					</table>
-				</div>
-
-				<div th:if="${not #lists.isEmpty(createdGames)}">
-					<h2>Games you have created but not joined</h2>
-					<table class="table table-striped table-bordered">
-						<tr>
-							<th>Game type</th>
-							<th>Players Involved</th>
-							<th>Game Status</th>
-						</tr>
-						<tr th:each="created : ${createdGames}">
-							<td><a th:href="${created.url}" href="setup.html" th:text="${created.displayName}">Chess</a></td>
-							<td th:text="${created.playerList}">Bob, Dave</td>
-							<td th:text="${created.status}">In Progress</td>
-						</tr>
-						<tr th:remove="all"><td>Draughts</td><td>Bob, Tom</td><td>Setting up</td></tr>
-					</table>
-				</div>
+			<div th:if="${not #lists.isEmpty(games)}">
+				<h2>All games</h2>
+				<table class="table table-striped table-bordered">
+					<tr>
+						<th>Game type</th>
+						<th>Players Involved</th>
+						<th>Game Status</th>
+					</tr>
+					<tr th:each="game : ${games}">
+						<td><a th:href="${'../' + game.url}" href="setup.html" th:text="${game.displayName}">Chess</a></td>
+						<td th:text="${game.playerList}">Bob, Dave</td>
+						<td th:text="${game.status}">In Progress</td>
+					</tr>
+					<tr th:remove="all"><td>Draughts</td><td>Bob, Tom</td><td>Setting up</td></tr>
+				</table>
 			</div>
+
 			<div th:if="${#lists.isEmpty(games) and #lists.isEmpty(createdGames)}">
-				<h1>Could not find any active games</h1>
+				<h1>Could not find any games</h1>
 				<p>You can use the menu in the navigation bar at top of this page to create
 				a new game or join a game created by someone else if you have the token.</p>
-			</div>
-			<div>
-				<p>You can view <a href="/allgames/0">all games here</a> including finished games.</p>
 			</div>
 			<div><a href="/home">Home</a></div>
 			<div>

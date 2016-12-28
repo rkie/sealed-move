@@ -54,7 +54,7 @@ public class GamesTest {
 		mockMvc.perform(get("/games").with(csrf()))
 		.andExpect(status().isOk())
 		.andExpect(content().string(
-				containsString("Here are the games you can view")));
+				containsString("Here are your active games")));
     }
     
     @Test
