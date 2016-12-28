@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -16,8 +17,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class ListGamesServiceImpl implements ListGamesService {
 	
-	// TODO: replace with property
-	private static final int PAGESIZE = 10;
+	@Value("${sm.games.pagesize}")
+	private int pagesize;
 
 	@Autowired
 	private PlayerDao playerDao;
@@ -65,7 +66,7 @@ public class ListGamesServiceImpl implements ListGamesService {
 
 	@Override
 	public Page<Game> listAllGames(User user, int pageNo) {
-		PageRequest pageable = new PageRequest(pageNo, PAGESIZE);
+		PageRequest pageable = new PageRequest(pageNo, pagesize);
 		String username = user.getUsername();
 		Page<Game> page = gameDao.findByOwnerUsernameOrPlayersUserUsername(pageable, username, username);;
 		return page;

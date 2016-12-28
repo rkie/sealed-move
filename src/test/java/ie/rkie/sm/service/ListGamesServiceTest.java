@@ -15,6 +15,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
@@ -64,6 +65,13 @@ public class ListGamesServiceTest {
 		List<Game> games = service.listFinishedJoinedGames(user);
 		assertThat(games, is(not(empty())));
 		assertThat(games.size(), is(1));
+	}
+	
+	@Test
+	public void testL() {
+		user = userDao.findOne("bob");
+		Page<Game> page = service.listAllGames(user, 0);
+		assertThat(page.getContent().size(), is(2));
 	}
 
 }
