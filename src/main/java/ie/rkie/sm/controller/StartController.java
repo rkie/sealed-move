@@ -5,6 +5,7 @@ import ie.rkie.sm.db.GameType;
 import ie.rkie.sm.db.User;
 import ie.rkie.sm.dto.GameSelectionDTO;
 import ie.rkie.sm.service.GameService;
+import ie.rkie.sm.service.LinkService;
 
 import java.util.List;
 
@@ -32,6 +33,9 @@ public class StartController {
 	@Autowired
 	private GameService gameService;
 
+	@Autowired
+	private LinkService linkService;
+
 	@RequestMapping(method = RequestMethod.GET)
 	public String startGame(Model model) {
 		// Load from data base
@@ -57,13 +61,9 @@ public class StartController {
 		model.addAttribute("token", token);
 		model.addAttribute("game", name);
 		
-		// TODO: clean up this messing with port and url....
-		int port = request.getLocalPort();
-		String portStr = "";
-		if ( port != 80 ) {
-			portStr = ":" + port;
-		}
-		String url = "http://" + request.getLocalName() + portStr + "/join?token=" + token;
+		// Determine full url based on request
+		String baseUrl = linkService.baseUrl(request.getLocalName(), request.getLocalPort());
+		String url = baseUrl + "join?token=" + token;
 		model.addAttribute("joinUrl", url);
 		
 		return "started";

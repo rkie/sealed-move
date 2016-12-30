@@ -30,6 +30,15 @@ values (
 	'tom@test.com',
 	'Thomas');
 
+-- this user will own a game in setup that's reached min players
+INSERT INTO users
+values (
+	'mike',
+	'$2a$10$TSuuMxi6iciko3F2TTAWCeBoEP7IMQfODOYyopk6Sbh0VLI//c98S',
+	1,
+	'mike@test.com',
+	'Michael');
+
 --	this guy will not be involved in any games
 INSERT INTO users
 values (
@@ -48,7 +57,9 @@ VALUES (3, 'tony', 'ROLE_USER');
 INSERT INTO authorities
 VALUES (4, 'tom', 'ROLE_USER');
 INSERT INTO authorities
-VALUES (5, 'ron', 'ROLE_USER');
+VALUES (5, 'mike', 'ROLE_USER');
+INSERT INTO authorities
+VALUES (6, 'ron', 'ROLE_USER');
 
 
 INSERT INTO game_status VALUES ('SETUP');
@@ -136,3 +147,21 @@ SELECT gid, owner, 1 FROM games where owner = 'tom';
 
 INSERT INTO players (gid, username, play_order)
 SELECT gid, 'bob', 1 FROM games where owner = 'tom';
+
+-- game in setup that has reached min but not max players
+insert into games (type_id, owner, status)
+VALUES (
+	(SELECT id FROM game_type WHERE name = 'snakes'),
+	'mike',
+	'SETUP'
+);
+
+INSERT INTO join_tokens (gid, token)
+SELECT gid, 'UNIQUE_TOKEN_GAME_MIN_REACHED'
+FROM games WHERE owner = 'mike';
+
+INSERT INTO players (gid, username, play_order)
+SELECT gid, owner, 1 FROM games where owner = 'mike';
+
+INSERT INTO players (gid, username, play_order)
+SELECT gid, 'bob', 1 FROM games where owner = 'mike';

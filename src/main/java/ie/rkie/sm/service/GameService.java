@@ -4,6 +4,7 @@ import ie.rkie.sm.db.Game;
 import ie.rkie.sm.db.GameType;
 import ie.rkie.sm.db.User;
 import ie.rkie.sm.dto.GameSelectionDTO;
+import ie.rkie.sm.dto.PlayerDTO;
 
 import java.util.List;
 
@@ -25,5 +26,12 @@ public interface GameService {
 	 * @return
 	 */
 	JoinAttemptResult joinWithToken(User player, String token);
+
+	/**
+	 * Create a list of {@link PlayerDTO} for presentation.
+	 * @param game
+	 * @return
+	 */
+	List<PlayerDTO> players(Game game);
 
 }

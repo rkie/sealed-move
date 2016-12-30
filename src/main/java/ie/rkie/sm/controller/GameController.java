@@ -2,9 +2,12 @@ package ie.rkie.sm.controller;
 
 import ie.rkie.sm.db.Game;
 import ie.rkie.sm.db.GameDao;
+import ie.rkie.sm.db.JoinTokenDao;
 import ie.rkie.sm.db.Player;
 import ie.rkie.sm.db.User;
 import ie.rkie.sm.dto.GameDTO;
+import ie.rkie.sm.service.GameService;
+import ie.rkie.sm.service.LinkService;
 import ie.rkie.sm.service.ListGamesService;
 
 import java.io.IOException;
@@ -12,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +40,16 @@ public class GameController {
 	private ListGamesService service;
 
 	@Autowired
+	private GameService gameService;
+
+	@Autowired
 	private GameDao gameDao;
+
+	@Autowired
+	private JoinTokenDao joinTokenDao;
+
+	@Autowired
+	private LinkService linkService;
 
 	/**
 	 * Gets all active games for the logged in user for viewing via the template games.
@@ -88,6 +101,7 @@ public class GameController {
 	@RequestMapping(path="/game", method = RequestMethod.GET)
 	public String viewGame(@RequestParam(value="gameid", required=false) Integer gid,
 			final HttpServletResponse response,
+			final HttpServletRequest request,
 			Model model) throws IOException {
 		Game game = gameDao.findOne(gid);
 		if ( game == null ) {
@@ -115,16 +129,57 @@ public class GameController {
 				return "error";
 			}
 		}
+		model.addAttribute("displayName", game.getGameType().getDisplayName());
+		model.addAttribute("game", game);
+		model.addAttribute("players", gameService.players(game));
+
+		boolean isOwner = false;
+		boolean canStart = false;
+		// Allow owner to remove players?
+		if ( game.getOwner().getUsername().equals(user.getUsername()) ) {
+			System.out.println("owner");
+			isOwner = true;
+			// Start the game if minimum players have joined
+			if ( game.getGameType().getMinPlayers() <= game.getPlayers().size() ) {
+				System.out.println("can start");
+				canStart = true;
+			}
+		}
+		model.addAttribute("isOwner", isOwner);
+		model.addAttribute("canStart", canStart);
+		
+		// Unit tests with mocking for this method
 		if ( "SETUP".equals(game.getStatus()) ) {
+			// add the join token to the game
+			if ( game.getGameType().getMaxPlayers() > game.getPlayers().size() ) {
+				String token = joinTokenDao.findOneByGame(game).getToken();
+				model.addAttribute("token", token);
+				String baseUrl = linkService.baseUrl(request.getLocalName(), request.getLocalPort());
+				String url = baseUrl + "join?token=" + token;
+				model.addAttribute("joinUrl", url);
+			}
+			
+			// TODO: Display/Change player order
+			
 			return "setup";
 		}
 		if ( "READY".equals(game.getStatus()) ) {
+			// TODO: Allow owner to remove players?
+			// TODO: Display/Change player order
+			// TODO: Start the game
 			return "ready";
 		}
 		if ( "ACTIVE".equals(game.getStatus()) ) {
+			// TODO: make a move
+			// TODO: check the board
+			// TODO: See past moves
+			// TODO: Resign
 			return "active";
 		}
 		// safe to return finished as fall-back as no action available in that template
+		// TODO: Add winner? or game status if available
+		// TODO: Display final board
+		// TODO: Display moves
 		return "finished";
 	}
 

@@ -1,6 +1,7 @@
 package ie.rkie.sm.templates;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.not;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -43,6 +44,8 @@ public class SetupTest {
     	
     	Game game = gameDao.findByOwner(userDao.findOne("bob")).get(0);
     	url = "/game?gameid=" + game.getGid();
+		game = gameDao.findByOwnerUsername("mike").get(0);
+		urlGameWithMinPlayers = "/game?gameid=" + game.getGid();
     }
     
     @Autowired
@@ -53,6 +56,8 @@ public class SetupTest {
     
     private String url;
     
+    private String urlGameWithMinPlayers;
+
     @Test
     @WithAnonymousUser
     public void testGetNotLoggedIn() throws Exception {
@@ -66,7 +71,7 @@ public class SetupTest {
 	public void testGetGameThatIsSettingUp() throws Exception {
 		mockMvc.perform(get(url).with(csrf()))
 		.andExpect(status().isOk())
-		.andExpect(content().string(containsString("This game is setting up.")));
+		.andExpect(content().string(containsString("<h1>This game of <span>Chess</span> still setting up.</h1>")));
 	}
     
     @Test
@@ -77,4 +82,48 @@ public class SetupTest {
 		.andExpect(content().string(containsString("You do not have access to see this game.")));
 	}
 
+    /**
+	 * Test for a game that has not reached the minimum number of players.
+	 * Should have join tokens visible but not start option
+	 * @throws Exception
+	 */
+    @Test
+    @WithUserDetails(value="bob", userDetailsServiceBeanName="userDetailsService")
+    public void testMinPlayersNotReached() throws Exception {
+		mockMvc.perform(get(url).with(csrf()))
+		.andExpect(status().isOk())
+		.andExpect(content().string(containsString("UNIQUE_GAME_ENTRY_TOKEN")))
+		.andExpect(content().string(not(containsString("Start Game"))));
+    }
+
+    /**
+	 * Test for owner of game with minimum players - should be able to start the
+	 * game, should be able to boot a player, change player order
+     * @throws Exception
+	 */
+    @Test
+    @WithUserDetails(value="mike", userDetailsServiceBeanName="userDetailsService")
+    public void testOwnerOfGameWithMinPlayers() throws Exception {
+		mockMvc.perform(get(urlGameWithMinPlayers).with(csrf()))
+		.andExpect(status().isOk())
+		.andExpect(content().string(containsString("UNIQUE_TOKEN_GAME_MIN_REACHED")))
+		.andExpect(content().string(containsString("Remove this player")))
+		.andExpect(content().string(containsString("Start Game")));
+    }
+
+    /**
+	 * Test for player in game with min players - no option to boot or change
+	 * play order or start.
+     * @throws Exception
+	 */
+    @Test
+    @WithUserDetails(value="bob", userDetailsServiceBeanName="userDetailsService")
+    public void testJoinerOfGamewithMinPlayers() throws Exception {
+		mockMvc.perform(get(urlGameWithMinPlayers).with(csrf()))
+		.andExpect(status().isOk())
+		.andExpect(content().string(containsString("Snakes and Ladders")))
+		.andExpect(content().string(not(containsString("UNIQUE_TOKEN_GAME_MIN_REACHED"))))
+		.andExpect(content().string(not(containsString("Remove this player"))))
+		.andExpect(content().string(not(containsString("Start Game"))));
+    }
 }

@@ -7,6 +7,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -81,7 +82,7 @@ public class GameDaoTest {
 	@Transactional
 	public void testFindByOwnerUsernameOrPlayersUserUsername() {
 		List<Game> games = dao.findByOwnerUsernameOrPlayersUserUsername("bob", "bob");
-		assertThat(games.size(), is(4));
+		assertThat(games.size(), is(5));
 	}
 
 	@Test
@@ -90,5 +91,28 @@ public class GameDaoTest {
 		PageRequest pageable = new PageRequest(0, 2);
 		Page<Game> pages = dao.findByOwnerUsernameOrPlayersUserUsername(pageable, "bob", "bob");
 		assertThat(pages.getContent().size(), is(2));
+	}
+
+	@Test
+	@Transactional
+	public void  testOutputGameData() {
+		List<Game> games = dao.findAll();
+		StringBuilder b = new StringBuilder();
+		for ( Game game : games ) {
+			if ( b.length() > 0 ) {
+				b.append("\n");
+			}
+			String gameType = game.getGameType().getDisplayName();
+			String status = game.getStatus();
+			String owner = game.getOwner().getUsername();
+			String playerList = game.getPlayers()
+					.stream()
+					.map(player -> player.getUser().getUsername())
+					.collect(Collectors.joining(", "));
+			String line = String.format("|%1$-20s | %2$-30s | %3$-8s | %4$-10s |",
+					gameType, playerList, status, owner);
+			b.append(line);
+		}
+		System.out.println(b.toString());
 	}
 }

@@ -10,9 +10,11 @@ import ie.rkie.sm.db.Player;
 import ie.rkie.sm.db.PlayerDao;
 import ie.rkie.sm.db.User;
 import ie.rkie.sm.dto.GameSelectionDTO;
+import ie.rkie.sm.dto.PlayerDTO;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -122,6 +124,17 @@ public class GameServiceImpl implements GameService {
 		game.getPlayers().add(player);
 		gameDao.save(game);
 		return JoinAttemptResult.SUCCESS;
+	}
+
+	@Override
+	public List<PlayerDTO> players(Game game) {
+		List<PlayerDTO> list =
+				game.getPlayers()
+				.stream()
+				.map(player -> new PlayerDTO(player.getUser().getUsername(), player.getPlayOrder()))
+				.collect(Collectors.toList());
+		System.out.println(list);
+		return list;
 	}
 	
 }
