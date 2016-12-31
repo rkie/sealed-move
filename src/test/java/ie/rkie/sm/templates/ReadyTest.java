@@ -70,7 +70,9 @@ public class ReadyTest {
 	public void testGetGameThatIsReady() throws Exception {
 		mockMvc.perform(get(url).with(csrf()))
 		.andExpect(status().isOk())
-		.andExpect(content().string(containsString("This game is ready to start.")));
+		.andExpect(content().string(containsString("This game is ready to start")))
+		.andExpect(content().string(containsString("Here is the list of registered players")))
+		.andExpect(content().string(containsString("Start Game")));
 	}
     
     @Test
@@ -78,7 +80,9 @@ public class ReadyTest {
 	public void testGetGameThatIsReadyAsPlayer() throws Exception {
 		mockMvc.perform(get(url).with(csrf()))
 		.andExpect(status().isOk())
-		.andExpect(content().string(containsString("This game is ready to start.")));
+		.andExpect(content().string(containsString("This game is ready to start")))
+		.andExpect(content().string(containsString("Here is the list of registered players")))
+		.andExpect(content().string(containsString("The owner of the game must start the game.")));
 	}
     
     @Test

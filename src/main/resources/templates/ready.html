@@ -46,7 +46,32 @@
 			</nav>
 		</div>
 		<div class="container">
-			<p>This game is ready to start.</p>
+			<h1>This game is ready to start</h1>
+		</div>
+		<div class="container">
+			<h3>Here is the list of registered players</h3>
+			<table class="table table-striped table-bordered">
+				<tr>
+					<th>Player</th>
+					<th>Play Order</th>
+					<th th:if="${isOwner}">Change Order</th>
+					<th th:if="${isOwner}">Remove Player</th>
+				</tr>
+				<tr th:each="player : ${#lists.sort(players, playOrder)}">
+					<td th:text="${player.username}">tom</td>
+					<td th:text="${player.playOrder}">1</td>
+					<td th:if="${isOwner}">Move</td>
+					<td th:if="${isOwner}">Remove this player</td>
+				</tr>
+				<tr th:remove="all"><td>bob</td><td>2</td><td>Move</td></tr>
+			</table>
+		</div>
+		<div class="container" th:if="${isOwner}">
+			This game is ready to start as the maximum number of players have joined. 
+			<a href="startgame" class="btn btn-large btn-success">Start Game</a>
+		</div>
+		<div class="container" th:if="${! isOwner}">
+			The owner of the game must start the game. 
 		</div>
 		<script th:src="@{/resources/js/jquery-1.11.2.min.js}" src="../../webapp/resources/js/jquery-1.11.2.min.js"></script>
 		<script th:src="@{/resources/js/bootstrap.min.js}" src="../../webapp/resources/js/bootstrap.min.js"></script>
