@@ -132,9 +132,11 @@ public class GameController {
 		model.addAttribute("displayName", game.getGameType().getDisplayName());
 		model.addAttribute("game", game);
 		model.addAttribute("players", gameService.players(game));
+		model.addAttribute("minPlayers", game.getGameType().getMinPlayers());
 
 		boolean isOwner = false;
 		boolean canStart = false;
+		boolean hasJoined = false;
 		// Allow owner to remove players?
 		if ( game.getOwner().getUsername().equals(user.getUsername()) ) {
 			System.out.println("owner");
@@ -145,8 +147,14 @@ public class GameController {
 				canStart = true;
 			}
 		}
+		for ( Player player : game.getPlayers() ) {
+			if ( player.getUser().getUsername().equals(user.getUsername()) ) {
+				hasJoined = true;
+			}
+		}
 		model.addAttribute("isOwner", isOwner);
 		model.addAttribute("canStart", canStart);
+		model.addAttribute("hasJoined", hasJoined);
 		
 		// Unit tests with mocking for this method
 		if ( "SETUP".equals(game.getStatus()) ) {

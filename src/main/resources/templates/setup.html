@@ -47,21 +47,29 @@
 		</div>
 		<div class="container">
 			<h1>This game of <span th:text="${displayName}">Game Name</span> still setting up.</h1>
+			<div th:if="${! hasJoined}">
+				<h3>You have not joined you own game yet</h3>
+				<p>Click here to join: </p>
+				<a class="btn btn-large btn-success" th:href="${joinUrl}" href="joined">Join Game</a>
+			</div>
 			<div th:if="${token != null and isOwner}" >
+				<h3>Invite players to join</h3>
 				<div class="panel panel-default">
 					<div class="panel-heading">There are still places available in this game. 
 					Send this joining link on to your opponent</div>
 					<div class="panel-body"><span th:text="${joinUrl}">Token</span></div>
 				</div>
-				<p>Another way to join is to use the following token: </p><pre th:text="${token}">token</pre>
+				<p>Another way to join is to use the following token on the join page once logged in: </p>
+				<pre th:text="${token}">token</pre>
 			</div>
 		</div>
 		<div class="container">
+			<h3>Here is the list of registered players so far</h3>
 			<table class="table table-striped table-bordered">
 				<tr>
 					<th>Player</th>
 					<th>Play Order</th>
-					<th th:if="${isOwner}">ChangeOrder</th>
+					<th th:if="${isOwner}">Change Order</th>
 					<th th:if="${isOwner}">Remove Player</th>
 				</tr>
 				<tr th:each="player : ${#lists.sort(players, playOrder)}">
@@ -76,6 +84,9 @@
 		<div class="container" th:if="${canStart}">
 			This game is ready to start as you have the minimum number of players. 
 			<a href="startgame" class="btn btn-large btn-success">Start Game</a>
+		</div>
+		<div class="container" th:if="${! canStart and isOwner}">
+			Not enough players have joined yet to start the game. You need <span th:text="${minPlayers}">2</span> players to start.
 		</div>
 		<script th:src="@{/resources/js/jquery-1.11.2.min.js}" src="../../webapp/resources/js/jquery-1.11.2.min.js"></script>
 		<script th:src="@{/resources/js/bootstrap.min.js}" src="../../webapp/resources/js/bootstrap.min.js"></script>

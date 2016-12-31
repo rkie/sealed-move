@@ -126,4 +126,16 @@ public class SetupTest {
 		.andExpect(content().string(not(containsString("Remove this player"))))
 		.andExpect(content().string(not(containsString("Start Game"))));
     }
+
+    /**
+     *  Test for owner that has not joined own game yet
+     * @throws Exception
+     */
+    @Test
+    @WithUserDetails(value="mike", userDetailsServiceBeanName="userDetailsService")
+    public void testOwnerHasNotJoinedYet() throws Exception {
+		mockMvc.perform(get(urlGameWithMinPlayers).with(csrf()))
+		.andExpect(status().isOk())
+		.andExpect(content().string(containsString("<h3>You have not joined you own game yet</h3>")));
+    }
 }

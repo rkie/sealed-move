@@ -149,6 +149,7 @@ INSERT INTO players (gid, username, play_order)
 SELECT gid, 'bob', 1 FROM games where owner = 'tom';
 
 -- game in setup that has reached min but not max players
+-- also acts as a game where the owner has not joined yet!
 insert into games (type_id, owner, status)
 VALUES (
 	(SELECT id FROM game_type WHERE name = 'snakes'),
@@ -161,7 +162,7 @@ SELECT gid, 'UNIQUE_TOKEN_GAME_MIN_REACHED'
 FROM games WHERE owner = 'mike';
 
 INSERT INTO players (gid, username, play_order)
-SELECT gid, owner, 1 FROM games where owner = 'mike';
+SELECT gid, 'tony', 1 FROM games where owner = 'mike';
 
 INSERT INTO players (gid, username, play_order)
 SELECT gid, 'bob', 1 FROM games where owner = 'mike';

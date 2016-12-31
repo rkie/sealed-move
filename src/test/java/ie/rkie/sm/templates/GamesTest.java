@@ -76,7 +76,7 @@ public class GamesTest {
     }
     
     @Test
-    @WithUserDetails(value="tony", userDetailsServiceBeanName="userDetailsService")
+    @WithUserDetails(value="ron", userDetailsServiceBeanName="userDetailsService")
     public void testNoGamesAtAll() throws Exception {
 		mockMvc.perform(get("/games").with(csrf()))
 		.andExpect(status().isOk())
