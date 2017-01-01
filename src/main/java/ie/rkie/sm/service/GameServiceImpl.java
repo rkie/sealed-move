@@ -128,10 +128,11 @@ public class GameServiceImpl implements GameService {
 
 	@Override
 	public List<PlayerDTO> players(Game game) {
+		final int numPlayers = game.getPlayers().size();
 		List<PlayerDTO> list =
 				game.getPlayers()
 				.stream()
-				.map(player -> new PlayerDTO(player.getUser().getUsername(), player.getPlayOrder()))
+				.map(player -> new PlayerDTO(player.getUser().getUsername(), player.getPlayOrder(), numPlayers))
 				.collect(Collectors.toList());
 		System.out.println(list);
 		return list;

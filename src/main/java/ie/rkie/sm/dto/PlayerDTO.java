@@ -6,10 +6,16 @@ public class PlayerDTO implements Comparable<PlayerDTO>{
 	
 	private Integer playOrder;
 
-	public PlayerDTO(String username, Integer playOrder) {
+	private boolean moveUp;
+
+	private boolean moveDown;
+
+	public PlayerDTO(String username, Integer playOrder, int numPlayers) {
 		super();
 		this.username = username;
 		this.playOrder = playOrder;
+		this.moveUp = playOrder < numPlayers;
+		this.moveDown = playOrder > 1;
 	}
 
 	public String getUsername() {
@@ -37,5 +43,13 @@ public class PlayerDTO implements Comparable<PlayerDTO>{
 	@Override
 	public int compareTo(PlayerDTO other) {
 		return playOrder.compareTo(other.playOrder);
+	}
+
+	public boolean isMoveUp() {
+		return moveUp;
+	}
+
+	public boolean isMoveDown() {
+		return moveDown;
 	}
 }

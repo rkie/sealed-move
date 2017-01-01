@@ -60,7 +60,10 @@
 				<tr th:each="player : ${#lists.sort(players, playOrder)}">
 					<td th:text="${player.username}">tom</td>
 					<td th:text="${player.playOrder}">1</td>
-					<td th:if="${isOwner}">Move</td>
+					<td th:if="${isOwner}">
+						<a th:if="${player.moveUp}" th:href="@{/changeorder(gameid=${game.gid},playOrder=${player.playOrder},direction=up)}" class="glyphicon glyphicon-arrow-down" href="#"></a>
+						<a th:if="${player.moveDown}" th:href="@{/changeorder(gameid=${game.gid},playOrder=${player.playOrder},direction=down)}"  class="glyphicon glyphicon-arrow-up" href="#"></a>
+					</td>
 					<td th:if="${isOwner}">Remove this player</td>
 				</tr>
 				<tr th:remove="all"><td>bob</td><td>2</td><td>Move</td></tr>
