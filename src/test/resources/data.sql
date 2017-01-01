@@ -166,3 +166,6 @@ SELECT gid, 'tony', 1 FROM games where owner = 'mike';
 
 INSERT INTO players (gid, username, play_order)
 SELECT gid, 'bob', 1 FROM games where owner = 'mike';
+
+INSERT INTO players (gid, username, play_order)
+SELECT gid, 'dave', 1 FROM games where owner = 'mike';

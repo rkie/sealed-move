@@ -53,7 +53,7 @@ public class PlayerDaoTest {
 	public void testFindByUserTwo() {
 		User user = userDao.findOne("dave");
 		List<Player> players = playerDao.findByUser(user);
-		assertThat(players.size(), is(2));
+		assertThat(players.size(), is(3));
 	}
 
 }

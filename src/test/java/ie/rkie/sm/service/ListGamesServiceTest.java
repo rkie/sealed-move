@@ -48,7 +48,7 @@ public class ListGamesServiceTest {
 		
 		List<Game> games = service.listActiveJoinedGames(user);
 		assertThat(games, is(not(empty())));
-		assertThat(games.size(), is(1));
+		assertThat(games.size(), is(2));
 	}
 	
 	@Test

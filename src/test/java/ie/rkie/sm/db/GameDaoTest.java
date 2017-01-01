@@ -109,8 +109,8 @@ public class GameDaoTest {
 					.stream()
 					.map(player -> player.getUser().getUsername())
 					.collect(Collectors.joining(", "));
-			String line = String.format("|%1$-20s | %2$-30s | %3$-8s | %4$-10s |",
-					gameType, playerList, status, owner);
+			String line = String.format("|%1$-20s | %2$-30s | %3$-8s | %4$-10s|%5$-5s|",
+					gameType, playerList, status, owner, game.getGid());
 			b.append(line);
 		}
 		System.out.println(b.toString());
