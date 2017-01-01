@@ -129,10 +129,10 @@ INSERT INTO players (gid, username, play_order)
 SELECT gid, owner, 1 FROM games where owner = 'tony';
 
 INSERT INTO players (gid, username, play_order)
-SELECT gid, 'bob', 1 FROM games where owner = 'tony';
+SELECT gid, 'bob', 2 FROM games where owner = 'tony';
 
 INSERT INTO players (gid, username, play_order)
-SELECT gid, 'dave', 1 FROM games where owner = 'tony';
+SELECT gid, 'dave', 3 FROM games where owner = 'tony';
 
 -- Game in progress
 insert into games (type_id, owner, status)
@@ -146,7 +146,7 @@ INSERT INTO players (gid, username, play_order)
 SELECT gid, owner, 1 FROM games where owner = 'tom';
 
 INSERT INTO players (gid, username, play_order)
-SELECT gid, 'bob', 1 FROM games where owner = 'tom';
+SELECT gid, 'bob', 2 FROM games where owner = 'tom';
 
 -- game in setup that has reached min but not max players
 -- also acts as a game where the owner has not joined yet!
@@ -165,7 +165,7 @@ INSERT INTO players (gid, username, play_order)
 SELECT gid, 'tony', 1 FROM games where owner = 'mike';
 
 INSERT INTO players (gid, username, play_order)
-SELECT gid, 'bob', 1 FROM games where owner = 'mike';
+SELECT gid, 'bob', 2 FROM games where owner = 'mike';
 
 INSERT INTO players (gid, username, play_order)
-SELECT gid, 'dave', 1 FROM games where owner = 'mike';
+SELECT gid, 'dave', 3 FROM games where owner = 'mike';
