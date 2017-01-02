@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,15 +45,18 @@ public class StartController {
 	}
 	
 	@RequestMapping(value="{name}/game", method = RequestMethod.GET)
-	public String startGame(@PathVariable String name, Model model, HttpServletRequest request) {
+	public String startGame(@PathVariable String name, Model model, HttpServletRequest request, Authentication auth) {
 		System.out.println("Game Started");
-		return startGame(name, 2, model, request);
+		return startGame(name, 2, model, request, auth);
 	}
 	
 	@RequestMapping(value="{name}/{players}/game", method = RequestMethod.GET)
-	public String startGame(@PathVariable String name, @PathVariable int players, Model model, HttpServletRequest request) {
+	public String startGame(@PathVariable String name,
+			@PathVariable int players,
+			Model model,
+			HttpServletRequest request,
+			Authentication auth) {
 		GameType gameType = gameService.fromName(name);
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User owner = (User) auth.getPrincipal();
 		Game game = gameService.startGame(gameType, players, owner);
 		String token = gameService.createToken(game);

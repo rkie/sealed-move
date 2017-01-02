@@ -11,6 +11,7 @@ import ie.rkie.sm.service.LinkService;
 import ie.rkie.sm.service.ListGamesService;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,7 +23,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -59,8 +59,7 @@ public class GameController {
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.GET, path="/games")
-	public String games(Model model) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	public String games(Model model, Authentication auth) {
 		User user = (User) auth.getPrincipal();
 		// Get the active games
 		List<Game> games = service.listActiveJoinedGames(user);
@@ -106,7 +105,8 @@ public class GameController {
 			final HttpServletRequest request,
 			Model model,
 			@ModelAttribute("changeStatus") String changeStatus,
-			@ModelAttribute("changeMessage") String changeMessage) throws IOException {
+			@ModelAttribute("changeMessage") String changeMessage,
+			Principal principal) throws IOException {
 		Game game = gameDao.findOne(gid);
 		if ( game == null ) {
 			String message = "Could not find that game.";
@@ -116,12 +116,10 @@ public class GameController {
 			return "error";
 		}
 		// TODO: this needs a better place and some finesse
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User user = (User) auth.getPrincipal();
-		if ( ! game.getOwner().getUsername().equals(user.getUsername()) ) {
+		if ( ! game.getOwner().getUsername().equals(principal.getName()) ) {
 			boolean found = false;
 			for ( Player player : game.getPlayers() ) {
-				if ( player.getUser().getUsername().equals(user.getUsername()) ) {
+				if ( player.getUser().getUsername().equals(principal.getName()) ) {
 					found = true;
 					break;
 				}
@@ -150,7 +148,7 @@ public class GameController {
 		boolean canStart = false;
 		boolean hasJoined = false;
 		// Allow owner to remove players?
-		if ( game.getOwner().getUsername().equals(user.getUsername()) ) {
+		if ( game.getOwner().getUsername().equals(principal.getName()) ) {
 			isOwner = true;
 			// Start the game if minimum players have joined
 			if ( game.getGameType().getMinPlayers() <= game.getPlayers().size() ) {
@@ -158,7 +156,7 @@ public class GameController {
 			}
 		}
 		for ( Player player : game.getPlayers() ) {
-			if ( player.getUser().getUsername().equals(user.getUsername()) ) {
+			if ( player.getUser().getUsername().equals(principal.getName()) ) {
 				hasJoined = true;
 			}
 		}
@@ -202,8 +200,7 @@ public class GameController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, path="/allgames/{pageNumber}")
-	public String allGames(@PathVariable Integer pageNumber, Model model) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	public String allGames(@PathVariable Integer pageNumber, Model model, Authentication auth) {
 		User user = (User) auth.getPrincipal();
 		Page<Game> page = service.listAllGames(user, pageNumber);
 

@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,10 +36,9 @@ public class ListController {
 	 */
 	@RequestMapping(value="/list", method=RequestMethod.GET)
 	@ResponseBody
-	public String listUsers() {
+	public String listUsers(Authentication auth) {
 		StringBuilder builder = new StringBuilder("<html><body>");
 		
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = (User) auth.getPrincipal();
 		builder.append("<p>Active games you created:<p>");
 		List<Game> games = listGamesService.listActiveOwnedGames(user);

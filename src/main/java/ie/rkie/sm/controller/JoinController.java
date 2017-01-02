@@ -7,7 +7,6 @@ import ie.rkie.sm.service.JoinAttemptResult;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +25,8 @@ public class JoinController {
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public String joinPageGet(@RequestParam(value="token", required=false) String token,
-			Model model) {
+			Model model,
+			Authentication auth) {
 		if ( token == null ) {
 			return "join";
 		}
@@ -36,7 +36,6 @@ public class JoinController {
 		}
 		
 		// get the current user
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User owner = (User) auth.getPrincipal();
 		JoinAttemptResult result = gameService.joinWithToken(owner, token);
 		if ( result == JoinAttemptResult.SUCCESS ) { 
