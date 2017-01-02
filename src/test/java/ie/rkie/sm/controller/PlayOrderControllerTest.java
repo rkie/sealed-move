@@ -110,7 +110,10 @@ public class PlayOrderControllerTest {
 			.andExpect(content().string(containsString(expectedFlashMessage)));
     }
     
-    // TODO Test moving a player from 2nd to 1st
+    /**
+     * Test moving a player from 2nd to 1st.
+     * @throws Exception
+     */
     @Test
     @WithUserDetails(value="dave", userDetailsServiceBeanName="userDetailsService")
     public void testMoveFrom2To1() throws Exception {
@@ -134,7 +137,10 @@ public class PlayOrderControllerTest {
 			.andExpect(content().string(containsString(expectedFlashMessage)));
     }
     
-    // TODO Test don't have access to change (not joined or owning)
+    /**
+     * Test don't have access to change (not joined or owning).
+     * @throws Exception
+     */
     @Test
     @WithUserDetails(value="mike", userDetailsServiceBeanName="userDetailsService")
     public void testNotOwnerOrJoinerToGame() throws Exception {
@@ -144,7 +150,10 @@ public class PlayOrderControllerTest {
 			.andExpect(content().string(containsString("You cannot perform that action")));
     }
     
-    // TODO Test don't have access to change (joined not owning)
+    /**
+     * Test don't have access to change (joined not owning).
+     * @throws Exception
+     */
     @Test
     @WithUserDetails(value="tom", userDetailsServiceBeanName="userDetailsService")
     public void testJoinerNotOwner() throws Exception {
