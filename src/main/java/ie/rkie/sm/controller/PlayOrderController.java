@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/changeorder")
@@ -35,7 +36,8 @@ public class PlayOrderController {
 			@RequestParam(name="playOrder") Integer playOrder,
 			@RequestParam(name="direction") String direction,
 			Model model,
-			Principal principal) throws IOException {
+			Principal principal,
+			RedirectAttributes redirectAttributes) throws IOException {
 		
 		// Check game exists
 		Game game = gameDao.findOne(gameId);
@@ -66,12 +68,13 @@ public class PlayOrderController {
 		}
 		List<Player> players = game.getPlayers();
 		final int numPlayers = players.size();
+		String redirectToGame = "redirect:/game?gameid=" + gameId;
 		int newPosition = (direction.equals("up") ? playOrder + 1 : playOrder - 1);
 		if ( newPosition < 1 || newPosition > numPlayers ) {
 			String message = "Request to move a player outide the possible range";
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, message);
-			model.addAttribute("message", message);
-			return "error";
+			redirectAttributes.addFlashAttribute("changeStatus", "warning");
+			redirectAttributes.addFlashAttribute("changeMessage", message);
+			return redirectToGame;
 		}
 		
 		// change play order of chosen player
@@ -84,8 +87,10 @@ public class PlayOrderController {
 		playerDao.save(player);
 		playerDao.save(affectedPlayer);
 		
-		// TODO: redirect back to the game web page - can a message be passed back to the indicate success?
-		return "redirect:/game?gameid=" + gameId;
+		// redirect back to the game web page with a message to the indicate success
+		redirectAttributes.addFlashAttribute("changeStatus", "success");
+		redirectAttributes.addFlashAttribute("changeMessage", "Position successfully changed");
+		return redirectToGame;
 	}
 
 }

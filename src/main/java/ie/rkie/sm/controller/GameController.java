@@ -18,12 +18,14 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -102,7 +104,9 @@ public class GameController {
 	public String viewGame(@RequestParam(value="gameid", required=false) Integer gid,
 			final HttpServletResponse response,
 			final HttpServletRequest request,
-			Model model) throws IOException {
+			Model model,
+			@ModelAttribute("changeStatus") String changeStatus,
+			@ModelAttribute("changeMessage") String changeMessage) throws IOException {
 		Game game = gameDao.findOne(gid);
 		if ( game == null ) {
 			String message = "Could not find that game.";
@@ -133,17 +137,23 @@ public class GameController {
 		model.addAttribute("game", game);
 		model.addAttribute("players", gameService.players(game));
 		model.addAttribute("minPlayers", game.getGameType().getMinPlayers());
+		// If redirected from a player position change, add model attributes
+		if ( StringUtils.isNotEmpty(changeStatus) ) {
+			model.addAttribute("changeStatus", changeStatus);
+			model.addAttribute("changeMessage", changeMessage);
+		}
+		else {
+			model.addAttribute("changeStatus", false);
+		}
 
 		boolean isOwner = false;
 		boolean canStart = false;
 		boolean hasJoined = false;
 		// Allow owner to remove players?
 		if ( game.getOwner().getUsername().equals(user.getUsername()) ) {
-			System.out.println("owner");
 			isOwner = true;
 			// Start the game if minimum players have joined
 			if ( game.getGameType().getMinPlayers() <= game.getPlayers().size() ) {
-				System.out.println("can start");
 				canStart = true;
 			}
 		}

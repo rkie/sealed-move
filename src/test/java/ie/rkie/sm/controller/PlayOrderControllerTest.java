@@ -1,9 +1,11 @@
 package ie.rkie.sm.controller;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.is;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -59,17 +61,26 @@ public class PlayOrderControllerTest {
      * @throws Exception
      */
     @Test
-    @WithUserDetails(value="dave", userDetailsServiceBeanName="userDetailsService")
+    @WithUserDetails(value="mike", userDetailsServiceBeanName="userDetailsService")
     public void testMoveFrom1To2() throws Exception {
-    	final String url  = String.format(urlStructure, 1, 1, "up");
-    	final String expectedRedirect = "/game?gameid=1";
+    	final String url  = String.format(urlStructure, 4, 1, "up");
+    	final String expectedRedirect = "/game?gameid=4";
+		final String expectedFlashMessage = "Position successfully changed";
     	mockMvc.perform(get(url))
 			.andExpect(status().isFound())
-			.andExpect(redirectedUrl(expectedRedirect));
-		mockMvc.perform(get(expectedRedirect))
+			.andExpect(redirectedUrl(expectedRedirect))
+			.andExpect(flash().attributeExists("changeStatus"))
+			.andExpect(flash().attributeExists("changeMessage"))
+			.andExpect(flash().attribute("changeStatus", is("success")))
+			.andExpect(flash().attribute("changeMessage", is(expectedFlashMessage)));
+    	// game 4 is used in two tests - no guarantee of order so only check the guaranteed player
+		mockMvc.perform(
+				get(expectedRedirect)
+				.flashAttr("changeStatus", "success")
+				.flashAttr("changeMessage", expectedFlashMessage))
 			.andExpect(status().isOk())
-			.andExpect(content().string(containsString("<td>dave</td>\n\t\t\t\t\t<td>2</td>")))
-			.andExpect(content().string(containsString("<td>bob</td>\n\t\t\t\t\t<td>1</td>")));
+			.andExpect(content().string(containsString("<td>tony</td>\n\t\t\t\t\t<td>2</td>")))
+			.andExpect(content().string(containsString(expectedFlashMessage)));
     }
     
     /**
@@ -81,27 +92,46 @@ public class PlayOrderControllerTest {
     public void testMoveFrom3To2() throws Exception {
     	String url  = String.format(urlStructure, 4, 3, "down");
 		final String expectedRedirect = "/game?gameid=4";
+		final String expectedFlashMessage = "Position successfully changed";
     	mockMvc.perform(get(url))
     		.andExpect(status().isFound())
-			.andExpect(redirectedUrl(expectedRedirect));
-		mockMvc.perform(get(expectedRedirect))
+			.andExpect(redirectedUrl(expectedRedirect))
+			.andExpect(flash().attributeExists("changeStatus"))
+			.andExpect(flash().attributeExists("changeMessage"))
+			.andExpect(flash().attribute("changeStatus", is("success")))
+			.andExpect(flash().attribute("changeMessage", is(expectedFlashMessage)));
+    	// game 4 is used in two tests - no guarantee of order so only check the guaranteed player
+		mockMvc.perform(
+				get(expectedRedirect)
+				.flashAttr("changeStatus", "success")
+				.flashAttr("changeMessage", expectedFlashMessage))
 			.andExpect(status().isOk())
-			.andExpect(content().string(containsString("<td>dave</td>\n\t\t\t\t\t<td>2</td>")));
+			.andExpect(content().string(containsString("<td>dave</td>\n\t\t\t\t\t<td>2</td>")))
+			.andExpect(content().string(containsString(expectedFlashMessage)));
     }
     
     // TODO Test moving a player from 2nd to 1st
     @Test
-    @WithUserDetails(value="mike", userDetailsServiceBeanName="userDetailsService")
+    @WithUserDetails(value="dave", userDetailsServiceBeanName="userDetailsService")
     public void testMoveFrom2To1() throws Exception {
-    	String url  = String.format(urlStructure, 4, 2, "down");
-		String expectedRedirect = "/game?gameid=4";
+    	String url  = String.format(urlStructure, 1, 2, "down");
+		String expectedRedirect = "/game?gameid=1";
+		final String expectedFlashMessage = "Position successfully changed";
 		mockMvc.perform(get(url))
 			.andExpect(status().isFound())
-			.andExpect(redirectedUrl(expectedRedirect));
-		mockMvc.perform(get(expectedRedirect))
+			.andExpect(redirectedUrl(expectedRedirect))
+			.andExpect(flash().attributeExists("changeStatus"))
+			.andExpect(flash().attributeExists("changeMessage"))
+			.andExpect(flash().attribute("changeStatus", is("success")))
+			.andExpect(flash().attribute("changeMessage", is(expectedFlashMessage)));
+		mockMvc.perform(
+				get(expectedRedirect)
+				.flashAttr("changeStatus", "success")
+				.flashAttr("changeMessage", expectedFlashMessage))
 			.andExpect(status().isOk())
 			.andExpect(content().string(containsString("<td>bob</td>\n\t\t\t\t\t<td>1</td>")))
-			.andExpect(content().string(containsString("<td>tony</td>\n\t\t\t\t\t<td>2</td>")));
+			.andExpect(content().string(containsString("<td>dave</td>\n\t\t\t\t\t<td>2</td>")))
+			.andExpect(content().string(containsString(expectedFlashMessage)));
     }
     
     // TODO Test don't have access to change (not joined or owning)
@@ -196,18 +226,40 @@ public class PlayOrderControllerTest {
     @WithUserDetails(value="dave", userDetailsServiceBeanName="userDetailsService")
     public void testInvalidToMovePlayerOneDown() throws Exception {
 		String url  = String.format(urlStructure, 1, 1, "down");
+		String expectedUrl = "/game?gameid=1";
+		final String expectedMessage = "Request to move a player outide the possible range";
 		mockMvc.perform(get(url))
-			.andExpect(status().isBadRequest())
-			.andExpect(content().string(containsString("Request to move a player outide the possible range")));
+			.andExpect(status().isFound())
+			.andExpect(redirectedUrl(expectedUrl))
+			.andExpect(flash().attribute("changeStatus", "warning"))
+			.andExpect(flash().attribute("changeMessage", expectedMessage));
+		// load redirect with flash attributes
+		mockMvc.perform(
+				get(expectedUrl)
+				.flashAttr("changeStatus", "warning")
+				.flashAttr("changeMessage", expectedMessage))
+			.andExpect(status().isOk())
+			.andExpect(content().string(containsString(expectedMessage)));
     }
 
     @Test
     @WithUserDetails(value="dave", userDetailsServiceBeanName="userDetailsService")
     public void testInvalidToMoveTopPlayerUp() throws Exception {
 		String url  = String.format(urlStructure, 1, 2, "up");
+		String expectedUrl = "/game?gameid=1";
+		final String expectedMessage = "Request to move a player outide the possible range";
 		mockMvc.perform(get(url))
-			.andExpect(status().isBadRequest())
-			.andExpect(content().string(containsString("Request to move a player outide the possible range")));
+			.andExpect(status().isFound())
+			.andExpect(redirectedUrl(expectedUrl))
+			.andExpect(flash().attribute("changeStatus", "warning"))
+			.andExpect(flash().attribute("changeMessage", expectedMessage));
+		// load redirect with flash attributes
+		mockMvc.perform(
+				get(expectedUrl)
+				.flashAttr("changeStatus", "warning")
+				.flashAttr("changeMessage", expectedMessage))
+			.andExpect(status().isOk())
+			.andExpect(content().string(containsString(expectedMessage)));
     }
 
 }

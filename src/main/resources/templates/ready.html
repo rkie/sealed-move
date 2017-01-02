@@ -50,6 +50,10 @@
 		</div>
 		<div class="container">
 			<h3>Here is the list of registered players</h3>
+			<div th:if="${changeStatus}" th:class="|alert alert-${changeStatus} alert-dismissable fade in|">
+				<a href="#" class="close" data-dismiss="alert">&times;</a>
+				<span th:text="${changeMessage}">Result of change</span>
+			</div>
 			<table class="table table-striped table-bordered">
 				<tr>
 					<th>Player</th>
