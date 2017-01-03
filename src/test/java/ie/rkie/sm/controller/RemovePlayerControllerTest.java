@@ -9,6 +9,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import javax.transaction.Transactional;
+
 import ie.rkie.sm.db.Game;
 import ie.rkie.sm.db.GameDao;
 import ie.rkie.sm.db.Player;
@@ -103,11 +106,12 @@ public class RemovePlayerControllerTest {
 	 * @throws Exception
 	 */
     @Test
-    @WithUserDetails(value="dave", userDetailsServiceBeanName="userDetailsService")
+    @WithUserDetails(value="bob", userDetailsServiceBeanName="userDetailsService")
     public void testRemoveNonExistantPlayer() throws Exception {
-		String url  = String.format(urlStructure, 1, 2);
-		String expectedUrl = "/game?gameid=1";
-		final String expectedMessage = "Attempt to remove non-existant player has failed";
+    	final int gameId = 0;
+		String url  = String.format(urlStructure, gameId, 2);
+		String expectedUrl = "/game?gameid=" + gameId;
+		final String expectedMessage = "Attempt to remove a player has failed";
 		mockMvc.perform(get(url))
 			.andExpect(status().isFound())
 			.andExpect(redirectedUrl(expectedUrl))
@@ -128,6 +132,7 @@ public class RemovePlayerControllerTest {
 	 */
     @Test
     @WithUserDetails(value="mike", userDetailsServiceBeanName="userDetailsService")
+    @Transactional
     public void testRemovePlayer1From3PlayerGame() throws Exception {
     	final int gameId = 4;
 		String url  = String.format(urlStructure, gameId, 1);
@@ -154,6 +159,7 @@ public class RemovePlayerControllerTest {
 	 */
     @Test
     @WithUserDetails(value="dave", userDetailsServiceBeanName="userDetailsService")
+    @Transactional
     public void testRemovePlayer2From2PlayerGame() throws Exception {
     	final int gameId = 1;
 		String url  = String.format(urlStructure, gameId, 2);
@@ -180,6 +186,7 @@ public class RemovePlayerControllerTest {
 	 */
     @Test
     @WithUserDetails(value="bob", userDetailsServiceBeanName="userDetailsService")
+    @Transactional
     public void testRemoveonlyPlayer() throws Exception {
     	final int gameId = 0;
 		String url  = String.format(urlStructure, gameId, 1);
@@ -267,11 +274,6 @@ public class RemovePlayerControllerTest {
 		mockMvc.perform(get(url))
 			.andExpect(status().isNotFound())
 			.andExpect(content().string(containsString("Could not find that game")));
-    }
-    
-    @After
-    public void after() {
-    	// TODO: Replace any successfully removed players!
     }
 
 }

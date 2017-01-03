@@ -9,6 +9,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import javax.transaction.Transactional;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -57,11 +59,13 @@ public class PlayOrderControllerTest {
     }
 
     /**
-     * Test moving a player from 1st to 2nd
+     * Test moving a player from 1st to 2nd. Note using transactional annotation so
+     * that the data does not get committed and corrupt other tests.
      * @throws Exception
      */
     @Test
     @WithUserDetails(value="mike", userDetailsServiceBeanName="userDetailsService")
+    @Transactional
     public void testMoveFrom1To2() throws Exception {
     	final String url  = String.format(urlStructure, 4, 1, "up");
     	final String expectedRedirect = "/game?gameid=4";
@@ -73,22 +77,24 @@ public class PlayOrderControllerTest {
 			.andExpect(flash().attributeExists("changeMessage"))
 			.andExpect(flash().attribute("changeStatus", is("success")))
 			.andExpect(flash().attribute("changeMessage", is(expectedFlashMessage)));
-    	// game 4 is used in two tests - no guarantee of order so only check the guaranteed player
 		mockMvc.perform(
 				get(expectedRedirect)
 				.flashAttr("changeStatus", "success")
 				.flashAttr("changeMessage", expectedFlashMessage))
 			.andExpect(status().isOk())
+			.andExpect(content().string(containsString("<td>bob</td>\n\t\t\t\t\t<td>1</td>")))
 			.andExpect(content().string(containsString("<td>tony</td>\n\t\t\t\t\t<td>2</td>")))
+			.andExpect(content().string(containsString("<td>dave</td>\n\t\t\t\t\t<td>3</td>")))
 			.andExpect(content().string(containsString(expectedFlashMessage)));
     }
     
     /**
-     * Test moving a player from 3rd to 2nd
+     * Test moving a player from 3rd to 2nd. In transaction for auto-rollback.
      * @throws Exception
      */
     @Test
     @WithUserDetails(value="mike", userDetailsServiceBeanName="userDetailsService")
+    @Transactional
     public void testMoveFrom3To2() throws Exception {
     	String url  = String.format(urlStructure, 4, 3, "down");
 		final String expectedRedirect = "/game?gameid=4";
@@ -100,22 +106,24 @@ public class PlayOrderControllerTest {
 			.andExpect(flash().attributeExists("changeMessage"))
 			.andExpect(flash().attribute("changeStatus", is("success")))
 			.andExpect(flash().attribute("changeMessage", is(expectedFlashMessage)));
-    	// game 4 is used in two tests - no guarantee of order so only check the guaranteed player
 		mockMvc.perform(
 				get(expectedRedirect)
 				.flashAttr("changeStatus", "success")
 				.flashAttr("changeMessage", expectedFlashMessage))
 			.andExpect(status().isOk())
+			.andExpect(content().string(containsString("<td>tony</td>\n\t\t\t\t\t<td>1</td>")))
 			.andExpect(content().string(containsString("<td>dave</td>\n\t\t\t\t\t<td>2</td>")))
+			.andExpect(content().string(containsString("<td>bob</td>\n\t\t\t\t\t<td>3</td>")))
 			.andExpect(content().string(containsString(expectedFlashMessage)));
     }
     
     /**
-     * Test moving a player from 2nd to 1st.
+     * Test moving a player from 2nd to 1st. In transaction for auto-rollback.
      * @throws Exception
      */
     @Test
     @WithUserDetails(value="dave", userDetailsServiceBeanName="userDetailsService")
+    @Transactional
     public void testMoveFrom2To1() throws Exception {
     	String url  = String.format(urlStructure, 1, 2, "down");
 		String expectedRedirect = "/game?gameid=1";
