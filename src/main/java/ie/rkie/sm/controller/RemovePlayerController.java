@@ -77,6 +77,7 @@ public class RemovePlayerController {
 		for ( Player p : game.getPlayers() ) {
 			if ( p.getPlayOrder() > oldOrder ) {
 				p.setPlayOrder(p.getPlayOrder() - 1);
+				playerDao.save(p);
 			}
 		}
 		

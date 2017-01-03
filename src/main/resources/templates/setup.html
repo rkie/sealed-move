@@ -83,7 +83,9 @@
 						<a th:if="${player.moveUp}" th:href="@{/changeorder(gameid=${game.gid},playOrder=${player.playOrder},direction=up)}" class="glyphicon glyphicon-arrow-down" href="#"></a>
 						<a th:if="${player.moveDown}" th:href="@{/changeorder(gameid=${game.gid},playOrder=${player.playOrder},direction=down)}"  class="glyphicon glyphicon-arrow-up" href="#"></a>
 					</td>
-					<td th:if="${isOwner}">Remove this player</td>
+					<td th:if="${isOwner}">
+						<a th:href="@{/removeplayer(gameid=${game.gid},playOrder=${player.playOrder})}" href="#">Remove this player</a>
+					</td>
 				</tr>
 				<tr th:remove="all"><td>bob</td><td>2</td><td>Move</td></tr>
 			</table>
