@@ -33,5 +33,7 @@ public interface GameService {
 	 * @return
 	 */
 	List<PlayerDTO> players(Game game);
+	
+	Game from(String token);
 
 }

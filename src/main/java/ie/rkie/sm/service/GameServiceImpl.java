@@ -85,7 +85,7 @@ public class GameServiceImpl implements GameService {
 	 * @param token
 	 * @return
 	 */
-	private Game from(String token) {
+	public Game from(String token) {
 		List<JoinToken> joinToken = joinTokenDao.findByToken(token);
 		if ( joinToken.size() == 0 ) {
 			return null;

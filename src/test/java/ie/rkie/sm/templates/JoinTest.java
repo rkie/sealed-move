@@ -7,6 +7,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import ie.rkie.sm.db.Game;
@@ -74,8 +75,10 @@ public class JoinTest {
 	public void testGetWithToken() throws Exception {
     	final String token = "UNIQUE_GAME_ENTRY_TOKEN";
 		mockMvc.perform(get("/join?token=" + token).with(csrf()))
-			.andExpect(status().isOk())
-			.andExpect(content().string(containsString("You have successfully joined the game.")));
+			.andExpect(status().isFound())
+			.andExpect(redirectedUrl("/game?gameid=0"))
+			.andExpect(flash().attribute("changeStatus", "success"))
+			.andExpect(flash().attribute("changeMessage", "You have successfully joined the game."));
 		// verify game was joined
 		Game game = joinTokenDao.findByToken(token).get(0).getGame();
 		List<Player> players = game.getPlayers();
