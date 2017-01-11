@@ -138,4 +138,8 @@ public class SetupTest {
 		.andExpect(status().isOk())
 		.andExpect(content().string(containsString("<h3>You have not joined you own game yet</h3>")));
     }
+
+    // TODO: Test successful change message
+
+    // TODO: Test warning of failed change message
 }

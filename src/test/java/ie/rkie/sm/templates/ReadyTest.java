@@ -93,4 +93,8 @@ public class ReadyTest {
 		.andExpect(content().string(containsString("You do not have access to see this game.")));
 	}
 
+    // TODO: Successful message of a change
+
+    // TODO: Warning message following a failed change
+
 }

@@ -9,15 +9,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import javax.transaction.Transactional;
-
 import ie.rkie.sm.db.Game;
 import ie.rkie.sm.db.GameDao;
 import ie.rkie.sm.db.Player;
 import ie.rkie.sm.db.PlayerDao;
 
-import org.junit.After;
+import javax.transaction.Transactional;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
