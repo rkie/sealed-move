@@ -107,14 +107,14 @@ public class GameController {
 			@ModelAttribute("changeStatus") String changeStatus,
 			@ModelAttribute("changeMessage") String changeMessage,
 			Principal principal) throws IOException {
-		Game game = gameDao.findOne(gid);
-		if ( game == null ) {
+		if ( gid == null ) {
 			String message = "Could not find that game.";
 			response.sendError(HttpServletResponse.SC_NOT_FOUND, message);
 			model.addAttribute("message", message);
 			// the return to setup will not work - white label error page will take over
 			return "error";
 		}
+		Game game = gameDao.findOne(gid);
 		// TODO: this needs a better place and some finesse
 		if ( ! game.getOwner().getUsername().equals(principal.getName()) ) {
 			boolean found = false;

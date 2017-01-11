@@ -50,13 +50,22 @@ public class GamesTest {
     
     @Test
     @WithUserDetails(value="bob", userDetailsServiceBeanName="userDetailsService")
+    public void testNoGameSpecified() throws Exception {
+    	mockMvc.perform(get("/game"))
+    		.andExpect(status().isNotFound())
+    		.andExpect(content().string(
+    				containsString("Could not find that game.")));
+    }
+    
+    @Test
+    @WithUserDetails(value="bob", userDetailsServiceBeanName="userDetailsService")
     public void testGamesListed() throws Exception {
 		mockMvc.perform(get("/games").with(csrf()))
 		.andExpect(status().isOk())
 		.andExpect(content().string(
 				containsString("Here are your active games")));
     }
-    
+
     @Test
     @WithUserDetails(value="bob", userDetailsServiceBeanName="userDetailsService")
     public void testNoCreatedGames() throws Exception {
