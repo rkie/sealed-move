@@ -50,11 +50,31 @@ public class HomeTest {
     @Test
     @WithAnonymousUser
     public void testNotLoggedInHome() throws Exception {
+    	final String expectedWelcome = messageSource.getMessage("home.welcome.message", null, Locale.UK);
+    	final String expectedLoginButton = messageSource.getMessage("nav.bar.log.in", null, Locale.UK);
+    	final String expectedSignedIn = messageSource.getMessage("nav.bar.signed.in.as", null, Locale.UK);
         mockMvc.perform(get("/"))
             .andExpect(status().isOk())
-            .andExpect(content().string(containsString("Welcome to the Sealed Move site")))
-            .andExpect(content().string(containsString("<button type=\"submit\" class=\"btn btn-primary\">Login</button>")))
-            .andExpect(content().string(not(containsString("Signed in as"))));
+            .andExpect(content().string(containsString(expectedWelcome)))
+            .andExpect(content().string(containsString("<button type=\"submit\" class=\"btn btn-primary\">"
+            		+ expectedLoginButton + "</button>")))
+            .andExpect(content().string(not(containsString(expectedSignedIn))));
+    }
+    
+    @Test
+    @WithAnonymousUser
+    public void testNotLoggedInHomeFrench() throws Exception {
+    	final String expectedWelcome = messageSource.getMessage("home.welcome.message", null, Locale.FRANCE);
+    	final String expectedLoginButton = messageSource.getMessage("nav.bar.log.in", null, Locale.FRANCE)
+    			.replace("'", "&#39;");
+    	final String expectedSignedIn = messageSource.getMessage("nav.bar.signed.in.as", null, Locale.FRANCE);
+        mockMvc.perform(get("/")
+        		.locale(Locale.FRANCE))
+            .andExpect(status().isOk())
+            .andExpect(content().string(containsString(expectedWelcome)))
+            .andExpect(content().string(containsString("<button type=\"submit\" class=\"btn btn-primary\">"
+            		+ expectedLoginButton + "</button>")))
+            .andExpect(content().string(not(containsString(expectedSignedIn))));
     }
     
     /**

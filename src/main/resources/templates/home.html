@@ -3,7 +3,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<title>Sealed Move</title>
+		<title th:text="#{branding.name}">Sealed Move</title>
 		<link 
 			rel="stylesheet" 
 			href="../../webapp/resources/css/bootstrap.min.css"
@@ -46,10 +46,10 @@
 		</div>
 		
 		<div class="container">
-			<h1>Welcome to the Sealed Move site</h1>
+			<h1 th:text="#{home.welcome.message}">Welcome to the Sealed Move site</h1>
 			<div class="hero-unit">
-				<h2>Let's get a game started!</h2>
-				<a href="start" class="btn btn-large btn-success">Start Game</a>
+				<h2 th:text="#{home.welcome.get.started}">Let's get a game started!</h2>
+				<a href="start" class="btn btn-large btn-success" th:text="#{game.start.game}">Start Game</a>
 			</div>
 		</div>
 		<script th:src="@{/resources/js/jquery-1.11.2.min.js}" src="../../webapp/resources/js/jquery-1.11.2.min.js"></script>
