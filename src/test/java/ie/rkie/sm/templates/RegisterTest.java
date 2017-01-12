@@ -1,6 +1,7 @@
 package ie.rkie.sm.templates;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -58,9 +59,11 @@ public class RegisterTest {
     @Test
     @WithUserDetails(value="bob", userDetailsServiceBeanName="userDetailsService")
     public void testLoggedInUserShouldNotSeeRegisterPage() throws Exception {
+    	String expectedMessage = messageSource.getMessage("register.already.logged.in.message", null, Locale.UK);
+    	
     	mockMvc.perform(get("/register"))
     		.andExpect(status().isOk())
-    		.andExpect(content().string(containsString("Please <a href=\"javascript: document.logoutForm.submit()\" role=\"menuitem\"> log out</a> before registering.")));
+    		.andExpect(content().string(containsString(expectedMessage)));
     }
     
     @Test
@@ -69,6 +72,22 @@ public class RegisterTest {
     	mockMvc.perform(get("/register"))
     		.andExpect(status().isOk())
     		.andExpect(content().string(containsString("<h1>Register</h1>")));
+    }
+    
+    /**
+     * Make sure French locale is working - checking for ?? will ensure properties
+     * that appear are found in the resources.
+     * @throws Exception
+     */
+    @Test
+    @WithAnonymousUser
+    public void testRegisterPageFrence() throws Exception {
+    	String expectedMessage = messageSource.getMessage("register.header", null, Locale.FRANCE);
+    	mockMvc.perform(get("/register")
+    			.locale(Locale.FRANCE))
+    		.andExpect(status().isOk())
+    		.andExpect(content().string(containsString("<h1>" + expectedMessage + "</h1>")))
+    		.andExpect(content().string(not(containsString("??"))));
     }
     
     @Test
