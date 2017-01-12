@@ -3,7 +3,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<title>Sealed Move</title>
+		<title th:text="#{branding.name}">Sealed Move</title>
 		<link 
 			rel="stylesheet" 
 			href="../../webapp/resources/css/bootstrap.min.css"
@@ -21,22 +21,24 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="/">Sealed Move</a>
+					<a class="navbar-brand" href="/" th:text="#{branding.name}">Sealed Move</a>
 				</div>
 				
 				<div sec:authorize="isAuthenticated()" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav pull-right">
-						<li class=" dropdown"><a href="#" class="dropdown-toggle active" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" th:inline="text">Signed in as <span sec:authentication="principal.firstName">Firstname</span> <span class="caret"></span></a>
+						<li class=" dropdown"><a href="#" class="dropdown-toggle active" data-toggle="dropdown" th:inline="text">
+						<span th:text="#{nav.bar.signed.in.as}">Signed in as</span> 
+						<span sec:authentication="principal.firstName">Firstname</span> <span class="caret"></span></a>
 							<ul class="dropdown-menu">
-								<li><a href="/start">Start a game</a></li>
-								<li><a href="/join">Join a game</a></li>
-								<li><a href="/games">My Games</a></li>
-								<li><a href="#">Change Password</a></li>
-								<li><a href="#">My Profile</a></li>
+								<li><a th:text="#{nav.bar.start}" href="/start">Start a game</a></li>
+								<li><a th:text="#{nav.bar.join}" href="/join">Join a game</a></li>
+								<li><a th:text="#{nav.bar.my.games}" href="/games">My games</a></li>
+								<li><a th:text="#{nav.bar.change.password}" href="#">Change password</a></li>
+								<li><a th:text="#{nav.bar.my.profile}" href="#">My profile</a></li>
 							</ul>
 						</li>
 						<li class="">			
-							<a href="javascript: document.logoutForm.submit()" role="menuitem"> Logout</a>
+							<a href="javascript: document.logoutForm.submit()" th:text="#{nav.bar.logout}"> Logout</a>
 							<form name="logoutForm" th:action="@{/logout}" method="POST" th:hidden="true">
 								<input th:hidden="true" type="submit" value="Logout"/>
 							</form>
@@ -48,14 +50,14 @@
 					<form id="signin" class="navbar-form navbar-right" th:action="@{/login}" method="POST">
 						<div class="input-group">
 							<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-							<input id="username" type="text" class="form-control" name="username" value="" placeholder="Username" />                                        
+							<input id="username" type="text" class="form-control" name="username" value="" th:placeholder="#{login.placeholder.username}" placeholder="Username" />                                        
 						</div>
 						<div class="input-group">
 							<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-							<input id="password" type="password" class="form-control" name="password" value="" placeholder="Password"/>                                        
+							<input id="password" type="password" class="form-control" name="password" value="" th:placeholder="#{login.placeholder.password}" placeholder="Password"/>                                        
 						</div>
 		
-						<button type="submit" class="btn btn-primary">Login</button>
+						<button type="submit" class="btn btn-primary" th:text="#{nav.bar.log.in}">Login</button>
 					</form>
 				</div>
 			</div>

@@ -3,7 +3,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<title>Sealed Move - Register</title>
+		<title th:text="#{register.title}">Sealed Move - Register</title>
 		<link 
 			rel="stylesheet" 
 			href="../../webapp/resources/css/bootstrap.min.css"
@@ -21,37 +21,37 @@
 				<div class="panel-body">
 					<div class="row">
 						<div class="col-md-6 col-md-offset-3">
-							<h1>Register</h1>
+							<h1 th:text="#{register.header}">Register</h1>
 							<div class="alert alert-danger" th:if="${#fields.hasErrors('firstName')}">
 								<p th:text="${#fields.errors('firstName')[0]}" />
 							</div>
 							<div class="form-group">
-								<input id="firstName" type="text" th:field="*{firstName}" th:errorclass="fieldError" class="form-control" name="firstName" value="" placeholder="First name" tabindex="1" />
+								<input id="firstName" type="text" th:field="*{firstName}" th:errorclass="fieldError" class="form-control" name="firstName" value="" th:placeholder="#{register.placeholder.firstname}" placeholder="First name" tabindex="1" />
 							</div>
 							<div class="alert alert-danger" th:if="${#fields.hasErrors('username')}">
 								<p th:text="${#fields.errors('username')[0]}" />
 							</div>
 							<div class="form-group">
-								<input id="username" type="text" th:field="*{username}" class="form-control" name="username" value="" placeholder="Username" tabindex="2"/>
+								<input id="username" type="text" th:field="*{username}" class="form-control" name="username" value="" th:placeholder="#{register.placeholder.username}" placeholder="Username" tabindex="2"/>
 							</div>
 							<div class="alert alert-danger" th:if="${#fields.hasErrors('email')}">
 								<p th:text="${#fields.errors('email')[0]}" />
 							</div>
 							<div class="form-group">
-								<input id="email" type="email" th:field="*{email}" class="form-control" name="email" value="" placeholder="Email" tabindex="3"/>
+								<input id="email" type="email" th:field="*{email}" class="form-control" name="email" value="" th:placeholder="#{register.placeholder.email}" placeholder="Email" tabindex="3"/>
 							</div>
 							<br />
 							<div class="alert alert-danger" th:if="${#fields.hasErrors('password')}">
 								<p th:utext="${#fields.errors('password')[0]}" />
 							</div>
 							<div class="form-group">
-								<input id="password" type="password" th:field="*{password}" class="form-control" name="password" value="" placeholder="Password" tabindex="4"/>
+								<input id="password" type="password" th:field="*{password}" class="form-control" name="password" value="" th:placeholder="#{register.placeholder.password}" placeholder="Password" tabindex="4"/>
 							</div>
 							<div class="form-group">
-								<input id="matchingPassword" type="password" th:field="*{matchingPassword}" class="form-control" name="matchingPassword" value="" placeholder="Repeat Password" tabindex="5"/>
+								<input id="matchingPassword" type="password" th:field="*{matchingPassword}" class="form-control" name="matchingPassword" value="" th:placeholder="#{register.placeholder.repeat.password}" placeholder="Repeat Password" tabindex="5"/>
 							</div>
 							<br />
-							<input type="submit" value="Register" class="btn btn-primary" tabindex="6"/>
+							<input type="submit" th:value="#{register.header}" value="Register" class="btn btn-primary" tabindex="6"/>
 						</div>
 					</div>
 				</div>
@@ -59,8 +59,9 @@
 			<script type="text/javascript">document.f.firstName.focus();</script>
 		</div>
 		<div class="container" sec:authorize="isAuthenticated()">
-			<h1>Already logged in</h1>
-			<p>Please <a href="javascript: document.logoutForm.submit()" role="menuitem"> log out</a> before registering.</p>
+			<h1 th:text="#{register.already.logged.in.title}">Already logged in</h1>
+			<p th:text="#{register.already.logged.in.message}">Please log out before registering.</p>
+			<a href="javascript: document.logoutForm.submit()" role="menuitem" th:text="#{nav.bar.logout}" class="btn btn-large btn-primary">Log out</a>
 		</div>
 		<script th:src="@{/resources/js/jquery-1.11.2.min.js}" src="../../webapp/resources/js/jquery-1.11.2.min.js"></script>
 		<script th:src="@{/resources/js/bootstrap.min.js}" src="../../webapp/resources/js/bootstrap.min.js"></script>

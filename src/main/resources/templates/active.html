@@ -3,7 +3,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<title>Sealed Move - Game in Progress</title>
+		<title th:text="#{game.active.title}">Sealed Move - Game in Progress</title>
 		<link 
 			rel="stylesheet" 
 			href="../../webapp/resources/css/bootstrap.min.css"
@@ -46,14 +46,14 @@
 			</nav>
 		</div>
 		<div class="container">
-			<p>This game is in progress.</p>
+			<p th:text="#{game.active.in.progress}">This game is in progress.</p>
 		</div>
 		<div class="container">
-			<h3>Here is the list of players</h3>
+			<h3 th:text="#{game.active.player.list}">Here is the list of players</h3>
 			<table class="table table-striped table-bordered">
 				<tr>
-					<th>Player</th>
-					<th>Play Order</th>
+					<th th:text="#{game.table.player}">Player</th>
+					<th th:text="#{game.table.player.order}">Play Order</th>
 				</tr>
 				<tr th:each="player : ${#lists.sort(players, playOrder)}">
 					<td th:text="${player.username}">tom</td>
