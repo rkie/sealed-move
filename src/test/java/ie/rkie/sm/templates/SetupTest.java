@@ -12,12 +12,15 @@ import ie.rkie.sm.db.Game;
 import ie.rkie.sm.db.GameDao;
 import ie.rkie.sm.db.UserDao;
 
+import java.util.Locale;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.MessageSource;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -54,6 +57,9 @@ public class SetupTest {
     @Autowired
     private GameDao gameDao;
     
+    @Autowired
+    private MessageSource messageSource;
+    
     private String url;
     
     private String urlGameWithMinPlayers;
@@ -77,9 +83,10 @@ public class SetupTest {
     @Test
     @WithUserDetails(value="dave", userDetailsServiceBeanName="userDetailsService")
 	public void testGetGameButNotAllowed() throws Exception {
+    	final String expectedMessage = messageSource.getMessage("game.no.access", null, Locale.UK);
 		mockMvc.perform(get(url).with(csrf()))
-		.andExpect(status().isUnauthorized())
-		.andExpect(content().string(containsString("You do not have access to see this game.")));
+			.andExpect(status().isUnauthorized())
+			.andExpect(content().string(containsString(expectedMessage)));
 	}
 
     /**

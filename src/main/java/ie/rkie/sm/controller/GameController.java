@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -52,6 +54,9 @@ public class GameController {
 
 	@Autowired
 	private LinkService linkService;
+
+	@Autowired
+	private MessageSource messageSource;
 
 	/**
 	 * Gets all active games for the logged in user for viewing via the template games.
@@ -106,9 +111,10 @@ public class GameController {
 			Model model,
 			@ModelAttribute("changeStatus") String changeStatus,
 			@ModelAttribute("changeMessage") String changeMessage,
-			Principal principal) throws IOException {
+			Principal principal,
+			Locale locale) throws IOException {
 		if ( gid == null ) {
-			String message = "Could not find that game.";
+			String message = messageSource.getMessage("game.not.found", null, locale);
 			response.sendError(HttpServletResponse.SC_NOT_FOUND, message);
 			model.addAttribute("message", message);
 			// the return to setup will not work - white label error page will take over
@@ -125,7 +131,7 @@ public class GameController {
 				}
 			}
 			if ( ! found ) {
-				String message = "You do not have access to see this game.";
+				String message = messageSource.getMessage("game.no.access", null, locale);
 				response.sendError(HttpServletResponse.SC_UNAUTHORIZED, message);
 				model.addAttribute("message", message);
 				return "error";
