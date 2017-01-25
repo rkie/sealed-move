@@ -8,12 +8,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.Locale;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.MessageSource;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -28,6 +31,9 @@ public class AllGamesTest {
 
     @Autowired
     private WebApplicationContext context;
+    
+    @Autowired
+    private MessageSource messageSource;
 
     private MockMvc mockMvc;
     
@@ -50,10 +56,11 @@ public class AllGamesTest {
     @Test
     @WithUserDetails(value="bob", userDetailsServiceBeanName="userDetailsService")
     public void testGamesListed() throws Exception {
+    	final String expected = messageSource.getMessage("game.all.header", null, Locale.UK);
 		mockMvc.perform(get("/allgames/0").with(csrf()))
 		.andExpect(status().isOk())
 		.andExpect(content().string(
-				containsString("Here are all the games in which you were involved including finished games:")));
+				containsString(expected)));
     }
     
     @Test
@@ -67,11 +74,10 @@ public class AllGamesTest {
     @Test
     @WithUserDetails(value="ron", userDetailsServiceBeanName="userDetailsService")
     public void testNoGamesAtAll() throws Exception {
+    	final String expected = messageSource.getMessage("game.all.no.games.header", null, Locale.UK);
 		mockMvc.perform(get("/allgames/0").with(csrf()))
 		.andExpect(status().isOk())
 		.andExpect(content().string(
-				containsString("Could not find any games")));
-
+				containsString(expected)));
     }
-
 }
