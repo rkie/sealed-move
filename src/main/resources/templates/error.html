@@ -46,7 +46,7 @@
 			</nav>
 		</div>
 		<div class="container">
-			<p>There is a problem displaying this page.</p>
+			<p th:text="#{error.page.header}">There is a problem displaying this page.</p>
 			<p th:text="${message}">The error message</p>
 <!-- 			<table>
 				<tr th:each="var : ${#vars}">
