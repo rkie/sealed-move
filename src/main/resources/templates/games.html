@@ -3,7 +3,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<title>Sealed Move - Your Games</title>
+		<title th:text="#{games.active.title}">Sealed Move - Your Games</title>
 		<link 
 			rel="stylesheet" 
 			href="../../webapp/resources/css/bootstrap.min.css"
@@ -27,14 +27,14 @@
 					
 					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 						<ul class="nav navbar-nav pull-right">
-							<li class=" dropdown"><a href="#" class="dropdown-toggle active" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Signed in as Joe <span class="caret"></span></a>
+							<li class=" dropdown"><a href="#" class="dropdown-toggle active" data-toggle="dropdown" >Signed in as Joe <span class="caret"></span></a>
 								<ul class="dropdown-menu">
 									<li><a href="#">Change Password</a></li>
 									<li><a href="#">My Profile</a></li>
 								</ul>
 							</li>
 							<li class="">			
-								<a href="javascript: document.logoutForm.submit()" role="menuitem"> Logout</a>
+								<a href="javascript: document.logoutForm.submit()"> Logout</a>
 								<form name="logoutForm" method="POST" action="/logout" hidden="hidden">
 									<input type="submit" value="Logout" hidden="hidden" />
 									<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
@@ -47,15 +47,15 @@
 		</div>
 		<div class="container">
 			<div th:if="${not (#lists.isEmpty(games) and #lists.isEmpty(createdGames))}">
-				<h1>Here are your active games.</h1>
+				<h1 th:text="#{games.active.header}">Here are your active games.</h1>
 
 				<div th:if="${not #lists.isEmpty(games)}">
-					<h2>Active games you have joined</h2>
+					<h2 th:text="#{games.active.joined}">Active games you have joined</h2>
 					<table class="table table-striped table-bordered">
 						<tr>
-							<th>Game type</th>
-							<th>Players Involved</th>
-							<th>Game Status</th>
+							<th th:text="#{game.type}">Game type</th>
+							<th th:text="#{game.players}">Players Involved</th>
+							<th th:text="#{game.status}">Game Status</th>
 						</tr>
 						<tr th:each="game : ${games}">
 							<td><a th:href="${game.url}" href="setup.html" th:text="${game.displayName}">Chess</a></td>
@@ -67,12 +67,12 @@
 				</div>
 
 				<div th:if="${not #lists.isEmpty(createdGames)}">
-					<h2>Games you have created but not joined</h2>
+					<h2 th:text="#{games.active.created}">Games you have created but not joined</h2>
 					<table class="table table-striped table-bordered">
 						<tr>
-							<th>Game type</th>
-							<th>Players Involved</th>
-							<th>Game Status</th>
+							<th th:text="#{game.type}">Game type</th>
+							<th th:text="#{game.players}">Players Involved</th>
+							<th th:text="#{game.status}">Game Status</th>
 						</tr>
 						<tr th:each="created : ${createdGames}">
 							<td><a th:href="${created.url}" href="setup.html" th:text="${created.displayName}">Chess</a></td>
@@ -84,16 +84,12 @@
 				</div>
 			</div>
 			<div th:if="${#lists.isEmpty(games) and #lists.isEmpty(createdGames)}">
-				<h1>Could not find any active games</h1>
-				<p>You can use the menu in the navigation bar at top of this page to create
+				<h1 th:text="#{games.active.no.games}">Could not find any active games</h1>
+				<p th:text="#{game.all.no.game.text}">You can use the menu in the navigation bar at top of this page to create
 				a new game or join a game created by someone else if you have the token.</p>
 			</div>
 			<div>
-				<p>You can view <a href="/allgames/0">all games here</a> including finished games.</p>
-			</div>
-			<div><a href="/home">Home</a></div>
-			<div>
-				<a href="javascript: document.logoutForm.submit()"> Logout</a>
+				<p><a href="/allgames/0" th:text="#{games.active.view.all.games}">You can view all games here including finished games.</a></p>
 			</div>
 		</div>
 		<script th:src="@{/resources/js/jquery-1.11.2.min.js}" src="../../webapp/resources/js/jquery-1.11.2.min.js"></script>
