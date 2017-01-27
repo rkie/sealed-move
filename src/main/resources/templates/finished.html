@@ -3,7 +3,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<title>Sealed Move - Game Finished</title>
+		<title th:text="#{game.finished.title}">Sealed Move - Game Finished</title>
 		<link 
 			rel="stylesheet" 
 			href="../../webapp/resources/css/bootstrap.min.css"
@@ -27,14 +27,14 @@
 					
 					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 						<ul class="nav navbar-nav pull-right">
-							<li class=" dropdown"><a href="#" class="dropdown-toggle active" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Signed in as Joe <span class="caret"></span></a>
+							<li class=" dropdown"><a href="#" class="dropdown-toggle active" data-toggle="dropdown">Signed in as Joe <span class="caret"></span></a>
 								<ul class="dropdown-menu">
 									<li><a href="#">Change Password</a></li>
 									<li><a href="#">My Profile</a></li>
 								</ul>
 							</li>
 							<li class="">			
-								<a href="javascript: document.logoutForm.submit()" role="menuitem"> Logout</a>
+								<a href="javascript: document.logoutForm.submit()"> Logout</a>
 								<form name="logoutForm" method="POST" action="/logout" hidden="hidden">
 									<input type="submit" value="Logout" hidden="hidden" />
 									<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
@@ -46,14 +46,14 @@
 			</nav>
 		</div>
 		<div class="container">
-			<p>This game is finished.</p>
+			<p th:text="#{game.finished.header}">This game is finished.</p>
 		</div>
 		<div class="container">
-			<h3>Here is the list players</h3>
+			<h3 th:text="#{game.finished.players}">Here is the list players</h3>
 			<table class="table table-striped table-bordered">
 				<tr>
-					<th>Player</th>
-					<th>Play Order</th>
+					<th th:text="#{game.table.player}">Player</th>
+					<th th:text="#{game.table.player.order}">Play Order</th>
 				</tr>
 				<tr th:each="player : ${#lists.sort(players, playOrder)}">
 					<td th:text="${player.username}">tom</td>

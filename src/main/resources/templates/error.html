@@ -27,14 +27,14 @@
 					
 					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 						<ul class="nav navbar-nav pull-right">
-							<li class=" dropdown"><a href="#" class="dropdown-toggle active" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Signed in as Joe <span class="caret"></span></a>
+							<li class=" dropdown"><a href="#" class="dropdown-toggle active" data-toggle="dropdown">Signed in as Joe <span class="caret"></span></a>
 								<ul class="dropdown-menu">
 									<li><a href="#">Change Password</a></li>
 									<li><a href="#">My Profile</a></li>
 								</ul>
 							</li>
 							<li class="">			
-								<a href="javascript: document.logoutForm.submit()" role="menuitem"> Logout</a>
+								<a href="javascript: document.logoutForm.submit()"> Logout</a>
 								<form name="logoutForm" method="POST" action="/logout" hidden="hidden">
 									<input type="submit" value="Logout" hidden="hidden" />
 									<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
