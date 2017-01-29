@@ -3,7 +3,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<title>Sealed Move - Start a New Game</title>
+		<title th:text="#{start.title}">Sealed Move - Start a New Game</title>
 		<link 
 			rel="stylesheet" 
 			href="../../webapp/resources/css/bootstrap.min.css"
@@ -27,14 +27,14 @@
 					
 					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 						<ul class="nav navbar-nav pull-right">
-							<li class=" dropdown"><a href="#" class="dropdown-toggle active" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Signed in as Joe <span class="caret"></span></a>
+							<li class=" dropdown"><a href="#" class="dropdown-toggle active" data-toggle="dropdown">Signed in as Joe <span class="caret"></span></a>
 								<ul class="dropdown-menu">
 									<li><a href="#">Change Password</a></li>
 									<li><a href="#">My Profile</a></li>
 								</ul>
 							</li>
 							<li class="">			
-								<a href="javascript: document.logoutForm.submit()" role="menuitem"> Logout</a>
+								<a href="javascript: document.logoutForm.submit()"> Logout</a>
 								<form name="logoutForm" method="POST" action="/logout" hidden="hidden">
 									<input type="submit" value="Logout" hidden="hidden" />
 									<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
@@ -46,7 +46,7 @@
 			</nav>
 		</div>
 		<div class="container">
-			<h1>You can start a new game here</h1>
+			<h1 th:text="#{start.header}">You can start a new game here</h1>
 			
 			<ul class="nav nav-tabs">
 				<li class="active"><a data-toggle="tab" href="#instructions">Instructions</a></li>
@@ -59,14 +59,14 @@
 			<div class="panel-body">
 				<div class="tab-content">
 					<div id="instructions" class="tab-pane fade in active">
-						<h3>Instructions</h3>
-						<p>Please select a game tab, enter the options and click start</p>
+						<h3 th:text="#{start.instructions.header}">Instructions</h3>
+						<p th:text="#{start.instructions.message}">Please select a game tab, enter the options and click start</p>
 					</div>
 					<div th:each="game : ${games}" th:id="${game.name}" class="tab-pane fade" id="game1">
 						<h3 th:text="${game.displayName}">Game 1</h3>
-						<p>This game must have a minimum of <span th:text="${game.minPlayers}">2</span> players
-						and a maximum of <span th:text="${game.maxPlayers}">2</span></p>
-						<p>Start a game with <a href="/started.html" th:href="@{'/start/'+${game.name}+'/2/game'}">2 player game</a>.</p>
+						<p th:text="#{start.instructions.num.players(${game.minPlayers}, ${game.maxPlayers})}">This game must have a minimum of 2 players
+						and a maximum of 2</p>
+						<p><a th:text="#{start.new.game}" href="/started.html" th:href="@{'/start/'+${game.name}+'/2/game'}">Start a new game</a>.</p>
 					</div>
 					<!-- TODO - these prototypes won't work!! -->
 					<div id="game2" th:remove="all" class="tab-pane fade">
@@ -77,12 +77,6 @@
 					</div>
 				</div>
 			</div>
-		
-			<div><a href="/home">Home</a></div>
-			<div>
-				<a href="javascript: document.logoutForm.submit()" role="menuitem"> Logout</a>
-			</div>
-			
 		</div>
 		<script th:src="@{/resources/js/jquery-1.11.2.min.js}" src="../../webapp/resources/js/jquery-1.11.2.min.js"></script>
 		<script th:src="@{/resources/js/bootstrap.min.js}" src="../../webapp/resources/js/bootstrap.min.js"></script>
