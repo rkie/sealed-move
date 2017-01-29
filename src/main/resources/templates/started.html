@@ -3,7 +3,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<title>Sealed Move - Start a New Game</title>
+		<title th:text="#{started.title}">Sealed Move - Game Started</title>
 		<link 
 			rel="stylesheet" 
 			href="../../webapp/resources/css/bootstrap.min.css"
@@ -27,14 +27,14 @@
 					
 					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 						<ul class="nav navbar-nav pull-right">
-							<li class=" dropdown"><a href="#" class="dropdown-toggle active" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Signed in as Joe <span class="caret"></span></a>
+							<li class=" dropdown"><a href="#" class="dropdown-toggle active" data-toggle="dropdown">Signed in as Joe <span class="caret"></span></a>
 								<ul class="dropdown-menu">
 									<li><a href="#">Change Password</a></li>
 									<li><a href="#">My Profile</a></li>
 								</ul>
 							</li>
 							<li class="">			
-								<a href="javascript: document.logoutForm.submit()" role="menuitem"> Logout</a>
+								<a href="javascript: document.logoutForm.submit()"> Logout</a>
 								<form name="logoutForm" method="POST" action="/logout" hidden="hidden">
 									<input type="submit" value="Logout" hidden="hidden" />
 									<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
@@ -46,30 +46,25 @@
 			</nav>
 		</div>
 		<div class="container">
-			<h1>You have started a game of <span th:text="${game}">game name</span>!</h1>
+			<h1 th:text="#{started.header(${game})}">You have started a game of Game Name!</h1>
 			
 			<div class="hero-unit">
-				<h2>Join this game now:</h2>
-				<a class="btn btn-large btn-success" th:href="${joinUrl}" href="joined">Join Game</a>
+				<h2 th:text="#{started.join.now}">Join this game now:</h2>
+				<a class="btn btn-large btn-success" th:href="${joinUrl}" href="joined" th:text="#{started.join.button}">Join Game</a>
 			</div>
 
 			<br />
 			<div class="panel panel-default">
-				<div class="panel-heading">Send this joining link on to your opponent</div>
+				<div class="panel-heading" th:text="#{started.send.link}">Send this joining link on to your opponent</div>
 				<div class="panel-body"><span th:text="${joinUrl}">Token</span></div>
 			</div>
 
-			<p>You may be setting up this game for other players so that you can view the game.
+			<p th:text="#{started.explanation}">You may be setting up this game for other players so that you can view the game.
 			If so just send the same link to each of the other players without joining yourself.</p>
 
-			<p>Another way to join is to use the following token: </p><pre th:text="${token}">token</pre>
-			<p>Use this on the <a href="/join">join screen</a> to join the game. This Join page is available from the
-			navigation bar once you are logged in.</p>
-			<div><a href="/home">Home</a></div>
-			<div>
-				<a href="javascript: document.logoutForm.submit()" role="menuitem"> Logout</a>
-			</div>
-			
+			<p th:text="#{started.another.way.to.join}">Another way to join is to use the following token: </p><pre th:text="${token}">token</pre>
+			<p><span th:text="#{started.first.part}">Use this on the </span><a href="/join" th:text="#{started.middle.part}">join screen</a><span th:text="started.end.part"> to join the game. This Join page is available from the
+			navigation bar once you are logged in.</span></p>
 		</div>
 		<script th:src="@{/resources/js/jquery-1.11.2.min.js}" src="../../webapp/resources/js/jquery-1.11.2.min.js"></script>
 		<script th:src="@{/resources/js/bootstrap.min.js}" src="../../webapp/resources/js/bootstrap.min.js"></script>

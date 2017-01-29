@@ -70,7 +70,7 @@ public class StartTest {
 	public void testStartChessGame() throws Exception {
 		MvcResult result = mockMvc.perform(get("/start/chess/game"))
 			.andExpect(status().isOk())
-			.andExpect(content().string(containsString("You have started a game of <span>chess</span>!")))
+			.andExpect(content().string(containsString("You have started a game of chess!")))
 			.andExpect(content().string(containsString("Send this joining link on to your opponent")))
 			.andReturn();
 		
