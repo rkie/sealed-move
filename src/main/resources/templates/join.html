@@ -3,7 +3,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<title>Sealed Move - Join a Game</title>
+		<title th:text="#{join.title}">Sealed Move - Join a Game</title>
 		<link 
 			rel="stylesheet" 
 			href="../../webapp/resources/css/bootstrap.min.css"
@@ -27,14 +27,14 @@
 					
 					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 						<ul class="nav navbar-nav pull-right">
-							<li class=" dropdown"><a href="#" class="dropdown-toggle active" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Signed in as Joe <span class="caret"></span></a>
+							<li class=" dropdown"><a href="#" class="dropdown-toggle active" data-toggle="dropdown">Signed in as Joe <span class="caret"></span></a>
 								<ul class="dropdown-menu">
 									<li><a href="#">Change Password</a></li>
 									<li><a href="#">My Profile</a></li>
 								</ul>
 							</li>
 							<li class="">			
-								<a href="javascript: document.logoutForm.submit()" role="menuitem"> Logout</a>
+								<a href="javascript: document.logoutForm.submit()"> Logout</a>
 								<form name="logoutForm" method="POST" action="/logout" hidden="hidden">
 									<input type="submit" value="Logout" hidden="hidden" />
 									<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
@@ -46,9 +46,9 @@
 			</nav>
 		</div>
 		<div class="container">
-			<h1>Have a game token?</h1>
+			<h1 th:text="#{join.header}">Have a game token?</h1>
 			
-			<p>You can join a game by entering the game token here.</p>
+			<p th:text="#{join.message}">You can join a game by entering the game token here.</p>
 			<form name="joinForm" method="GET" action="/join">
 				
 				<div class="alert alert-danger" th:if="${errorMessage}!=null">
@@ -57,11 +57,6 @@
 				<input type="text" name="token" />
 				<input type="submit" value="Join"  />
 			</form>
-			<div><a href="/home">Home</a></div>
-			<div>
-				<a href="javascript: document.logoutForm.submit()" role="menuitem"> Logout</a>
-			</div>
-			
 		</div>
 		<script th:src="@{/resources/js/jquery-1.11.2.min.js}" src="../../webapp/resources/js/jquery-1.11.2.min.js"></script>
 		<script th:src="@{/resources/js/bootstrap.min.js}" src="../../webapp/resources/js/bootstrap.min.js"></script>
