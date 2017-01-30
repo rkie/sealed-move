@@ -7,6 +7,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.Locale;
+
 import ie.rkie.sm.db.Game;
 import ie.rkie.sm.db.GameDao;
 import ie.rkie.sm.db.UserDao;
@@ -17,6 +20,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.MessageSource;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -55,6 +59,9 @@ public class ActiveTest {
     @Autowired
     private GameDao gameDao;
     
+    @Autowired
+    private MessageSource messageSource;
+    
     private String url;
     
     @Test
@@ -68,25 +75,28 @@ public class ActiveTest {
     @Test
     @WithUserDetails(value="tom", userDetailsServiceBeanName="userDetailsService")
 	public void testGetGameThatIsReady() throws Exception {
+    	final String expected = messageSource.getMessage("game.active.in.progress", null, Locale.UK);
 		mockMvc.perform(get(url).with(csrf()))
 		.andExpect(status().isOk())
-		.andExpect(content().string(containsString("This game is in progress.")));
+		.andExpect(content().string(containsString(expected)));
 	}
     
     @Test
     @WithUserDetails(value="bob", userDetailsServiceBeanName="userDetailsService")
 	public void testGetGameThatIsReadyAsPlayer() throws Exception {
+    	final String expected = messageSource.getMessage("game.active.in.progress", null, Locale.UK);
 		mockMvc.perform(get(url).with(csrf()))
 		.andExpect(status().isOk())
-		.andExpect(content().string(containsString("This game is in progress.")));
+		.andExpect(content().string(containsString(expected)));
 	}
     
     @Test
     @WithUserDetails(value="tony", userDetailsServiceBeanName="userDetailsService")
 	public void testGetGameButNotAllowed() throws Exception {
+    	final String expected = messageSource.getMessage("game.no.access", null, Locale.UK);
 		mockMvc.perform(get(url).with(csrf()))
 		.andExpect(status().isUnauthorized())
-		.andExpect(content().string(containsString("You do not have access to see this game.")));
+		.andExpect(content().string(containsString(expected)));
 	}
 
 }

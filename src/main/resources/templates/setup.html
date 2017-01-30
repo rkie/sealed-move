@@ -46,8 +46,7 @@
 			</nav>
 		</div>
 		<div class="container">
-			<!-- TODO: This text needs help from the game implementation -->
-			<h1>This game of <span th:text="${displayName}">Game Name</span> still setting up.</h1>
+			<h1 th:text="#{game.setup.in.setup(${displayName})}">This game of Game Name is still setting up.</h1>
 			<div th:if="${! hasJoined}">
 				<h3 th:text="#{game.setup.not.joined.header}">You have not joined you own game yet</h3>
 				<p th:text="game.setup.not.joined.message">Click here to join: </p>

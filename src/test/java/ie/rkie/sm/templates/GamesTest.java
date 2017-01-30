@@ -9,12 +9,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.Locale;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.MessageSource;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -31,6 +34,9 @@ public class GamesTest {
     private WebApplicationContext context;
 
     private MockMvc mockMvc;
+    
+    @Autowired
+    private MessageSource messageSource;
     
     @Before
     public void before() {
@@ -51,48 +57,54 @@ public class GamesTest {
     @Test
     @WithUserDetails(value="bob", userDetailsServiceBeanName="userDetailsService")
     public void testNoGameSpecified() throws Exception {
+    	String expected = messageSource.getMessage("game.not.found", null, Locale.UK);
     	mockMvc.perform(get("/game"))
     		.andExpect(status().isNotFound())
     		.andExpect(content().string(
-    				containsString("Could not find that game.")));
+    				containsString(expected)));
     }
     
     @Test
     @WithUserDetails(value="bob", userDetailsServiceBeanName="userDetailsService")
     public void testGamesListed() throws Exception {
+    	String expected = messageSource.getMessage("games.active.header", null, Locale.UK);
 		mockMvc.perform(get("/games").with(csrf()))
 		.andExpect(status().isOk())
 		.andExpect(content().string(
-				containsString("Here are your active games")));
+				containsString(expected)));
     }
 
     @Test
     @WithUserDetails(value="bob", userDetailsServiceBeanName="userDetailsService")
     public void testNoCreatedGames() throws Exception {
+    	String expected = messageSource.getMessage("games.active.joined", null, Locale.UK);
 		mockMvc.perform(get("/games").with(csrf()))
 		.andExpect(status().isOk())
 		.andExpect(content().string(
-				containsString("Active games you have joined")));
+				containsString(expected)));
     }
     
     @Test
     @WithUserDetails(value="dave", userDetailsServiceBeanName="userDetailsService")
     public void testNoJoinedGames() throws Exception {
+    	String expected = messageSource.getMessage("games.active.created", null, Locale.UK);
 		mockMvc.perform(get("/games").with(csrf()))
 		.andExpect(status().isOk())
 		.andExpect(content().string(
-				containsString("Games you have created but not joined")));
+				containsString(expected)));
     }
     
     @Test
     @WithUserDetails(value="ron", userDetailsServiceBeanName="userDetailsService")
     public void testNoGamesAtAll() throws Exception {
+    	String expected = messageSource.getMessage("games.active.no.games", null, Locale.UK);
+    	String notContains1 = messageSource.getMessage("games.active.joined", null, Locale.UK);
+    	String notContains2 = messageSource.getMessage("games.active.created", null, Locale.UK);
 		mockMvc.perform(get("/games").with(csrf()))
 		.andExpect(status().isOk())
-		.andExpect(content().string(
-				containsString("Could not find any active games")))
-		.andExpect(content().string(not(containsString("Active games you have joined"))))
-		.andExpect(content().string(not(containsString("Games you have created but not joined"))));
+		.andExpect(content().string(containsString(expected)))
+		.andExpect(content().string(not(containsString(notContains1))))
+		.andExpect(content().string(not(containsString(notContains2))));
 
     }
 

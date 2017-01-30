@@ -7,6 +7,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.Locale;
+
 import ie.rkie.sm.db.Game;
 import ie.rkie.sm.db.GameDao;
 import ie.rkie.sm.db.UserDao;
@@ -17,6 +20,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.MessageSource;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -55,6 +59,9 @@ public class ReadyTest {
     @Autowired
     private GameDao gameDao;
     
+    @Autowired
+    private MessageSource messageSource; 
+    
     private String url;
     
     @Test
@@ -68,11 +75,15 @@ public class ReadyTest {
     @Test
     @WithUserDetails(value="dave", userDetailsServiceBeanName="userDetailsService")
 	public void testGetGameThatIsReady() throws Exception {
+    	final String expectedReady = messageSource.getMessage("game.ready.can.start", null, Locale.UK);
+    	final String expectedplayers = messageSource.getMessage("game.ready.player.list", null, Locale.UK);
+    	final String expectedStartGame = messageSource.getMessage("game.start.game", null, Locale.UK);
+    	
 		mockMvc.perform(get(url).with(csrf()))
 		.andExpect(status().isOk())
-		.andExpect(content().string(containsString("This game is ready to start")))
-		.andExpect(content().string(containsString("Here is the list of registered players")))
-		.andExpect(content().string(containsString("Start Game")));
+		.andExpect(content().string(containsString(expectedReady)))
+		.andExpect(content().string(containsString(expectedplayers)))
+		.andExpect(content().string(containsString(expectedStartGame)));
 	}
     
     @Test

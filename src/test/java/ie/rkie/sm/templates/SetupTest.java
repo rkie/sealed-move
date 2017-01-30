@@ -75,9 +75,10 @@ public class SetupTest {
     @Test
     @WithUserDetails(value="bob", userDetailsServiceBeanName="userDetailsService")
 	public void testGetGameThatIsSettingUp() throws Exception {
+    	final String expected = messageSource.getMessage("game.setup.in.setup", new Object[] {"Chess"}, Locale.UK);
 		mockMvc.perform(get(url).with(csrf()))
 		.andExpect(status().isOk())
-		.andExpect(content().string(containsString("<h1>This game of <span>Chess</span> still setting up.</h1>")));
+		.andExpect(content().string(containsString("<h1>" + expected + "</h1>")));
 	}
     
     @Test
@@ -97,10 +98,12 @@ public class SetupTest {
     @Test
     @WithUserDetails(value="bob", userDetailsServiceBeanName="userDetailsService")
     public void testMinPlayersNotReached() throws Exception {
+    	final String expectedStartGame = messageSource.getMessage("game.start.game", null, Locale.UK);
+    	
 		mockMvc.perform(get(url).with(csrf()))
 		.andExpect(status().isOk())
 		.andExpect(content().string(containsString("UNIQUE_GAME_ENTRY_TOKEN")))
-		.andExpect(content().string(not(containsString("Start Game"))));
+		.andExpect(content().string(not(containsString(expectedStartGame))));
     }
 
     /**
@@ -111,11 +114,14 @@ public class SetupTest {
     @Test
     @WithUserDetails(value="mike", userDetailsServiceBeanName="userDetailsService")
     public void testOwnerOfGameWithMinPlayers() throws Exception {
+    	final String expectedRemovePlayer = messageSource.getMessage("game.table.remove.player", null, Locale.UK);
+    	final String expectedStartGame = messageSource.getMessage("game.start.game", null, Locale.UK);
+    	
 		mockMvc.perform(get(urlGameWithMinPlayers).with(csrf()))
 		.andExpect(status().isOk())
 		.andExpect(content().string(containsString("UNIQUE_TOKEN_GAME_MIN_REACHED")))
-		.andExpect(content().string(containsString("Remove this player")))
-		.andExpect(content().string(containsString("Start Game")));
+		.andExpect(content().string(containsString(expectedRemovePlayer)))
+		.andExpect(content().string(containsString(expectedStartGame)));
     }
 
     /**
@@ -126,12 +132,15 @@ public class SetupTest {
     @Test
     @WithUserDetails(value="bob", userDetailsServiceBeanName="userDetailsService")
     public void testJoinerOfGamewithMinPlayers() throws Exception {
+    	final String expectedRemovePlayer = messageSource.getMessage("game.table.remove.player", null, Locale.UK);
+    	final String expectedStartGame = messageSource.getMessage("game.start.game", null, Locale.UK);
+    	
 		mockMvc.perform(get(urlGameWithMinPlayers).with(csrf()))
 		.andExpect(status().isOk())
 		.andExpect(content().string(containsString("Snakes and Ladders")))
 		.andExpect(content().string(not(containsString("UNIQUE_TOKEN_GAME_MIN_REACHED"))))
-		.andExpect(content().string(not(containsString("Remove this player"))))
-		.andExpect(content().string(not(containsString("Start Game"))));
+		.andExpect(content().string(not(containsString(expectedRemovePlayer))))
+		.andExpect(content().string(not(containsString(expectedStartGame))));
     }
 
     /**
@@ -141,9 +150,10 @@ public class SetupTest {
     @Test
     @WithUserDetails(value="mike", userDetailsServiceBeanName="userDetailsService")
     public void testOwnerHasNotJoinedYet() throws Exception {
+    	final String expected = messageSource.getMessage("game.setup.not.joined.header", null, Locale.UK);
 		mockMvc.perform(get(urlGameWithMinPlayers).with(csrf()))
 		.andExpect(status().isOk())
-		.andExpect(content().string(containsString("<h3>You have not joined you own game yet</h3>")));
+		.andExpect(content().string(containsString("<h3>" + expected + "</h3>")));
     }
 
     // TODO: Test successful change message

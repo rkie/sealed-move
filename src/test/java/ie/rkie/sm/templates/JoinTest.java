@@ -15,6 +15,7 @@ import ie.rkie.sm.db.JoinTokenDao;
 import ie.rkie.sm.db.Player;
 
 import java.util.List;
+import java.util.Locale;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -22,6 +23,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.MessageSource;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -40,6 +42,9 @@ public class JoinTest {
     
     @Autowired
     private JoinTokenDao joinTokenDao;
+    
+    @Autowired
+    private MessageSource messageSource;
 
     private MockMvc mockMvc;
     
@@ -62,10 +67,11 @@ public class JoinTest {
     @Test
     @WithUserDetails(value="bob", userDetailsServiceBeanName="userDetailsService")
 	public void testGetWithoutToken() throws Exception {
+    	final String expected = messageSource.getMessage("join.message", null, Locale.UK);
 		mockMvc.perform(get("/join").with(csrf()))
 			.andExpect(status().isOk())
 			.andExpect(content().string(
-					containsString("You can join a game by entering the game token here.")));
+					containsString(expected)));
 			
 	}
     
@@ -73,12 +79,13 @@ public class JoinTest {
     @WithUserDetails(value="dave", userDetailsServiceBeanName="userDetailsService")
     @Transactional
 	public void testGetWithToken() throws Exception {
+    	final String expected = messageSource.getMessage("join.success", null, Locale.UK);
     	final String token = "UNIQUE_GAME_ENTRY_TOKEN";
 		mockMvc.perform(get("/join?token=" + token).with(csrf()))
 			.andExpect(status().isFound())
 			.andExpect(redirectedUrl("/game?gameid=0"))
 			.andExpect(flash().attribute("changeStatus", "success"))
-			.andExpect(flash().attribute("changeMessage", "You have successfully joined the game."));
+			.andExpect(flash().attribute("changeMessage", expected));
 		// verify game was joined
 		Game game = joinTokenDao.findByToken(token).get(0).getGame();
 		List<Player> players = game.getPlayers();
@@ -88,25 +95,28 @@ public class JoinTest {
     @Test
     @WithUserDetails(value="bob", userDetailsServiceBeanName="userDetailsService")
 	public void testGetWithInvalidToken() throws Exception {
+    	final String expected = messageSource.getMessage("join.token.not.found", null, Locale.UK);
 		mockMvc.perform(get("/join?token=testtoken").with(csrf()))
 		.andExpect(status().isOk())
-		.andExpect(content().string(containsString("You cannot join a game with the token provided.")));
+		.andExpect(content().string(containsString(expected)));
 	}
 
     @Test
     @WithUserDetails(value="bob", userDetailsServiceBeanName="userDetailsService")
     public void testAlreadyJoined() throws Exception {
+    	final String expected = messageSource.getMessage("join.player.already.joined", null, Locale.UK);
 		mockMvc.perform(get("/join?token=UNIQUE_GAME_ENTRY_TOKEN").with(csrf()))
 		.andExpect(status().isOk())
-		.andExpect(content().string(containsString("You have joined the game associated with that token already.")));
+		.andExpect(content().string(containsString(expected)));
     }
 
     @Test
     @WithUserDetails(value="tony", userDetailsServiceBeanName="userDetailsService")
     public void testPlayerLimitReached() throws Exception {
+    	final String expected = messageSource.getMessage("join.player.limit.reached", null, Locale.UK);
 		mockMvc.perform(get("/join?token=UNIQUE_TOKEN_GAME_FULL").with(csrf()))
 		.andExpect(status().isOk())
-		.andExpect(content().string(containsString("There are no more players allowed in the game associated with that token")));
+		.andExpect(content().string(containsString(expected)));
     }
 	
 }

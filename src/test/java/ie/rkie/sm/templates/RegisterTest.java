@@ -69,9 +69,11 @@ public class RegisterTest {
     @Test
     @WithAnonymousUser
     public void testRegisterPage() throws Exception {
+    	final String expected = "<h1>" + messageSource.getMessage("register.header", null, Locale.UK) + "</h1>";
+    	
     	mockMvc.perform(get("/register"))
     		.andExpect(status().isOk())
-    		.andExpect(content().string(containsString("<h1>Register</h1>")));
+    		.andExpect(content().string(containsString(expected)));
     }
     
     /**
@@ -233,5 +235,4 @@ public class RegisterTest {
     		.andExpect(status().isOk())	// 200 but errors in body
     		.andExpect(content().string(containsString(errorMessage)));
     }
-
 }

@@ -14,6 +14,7 @@ import ie.rkie.sm.db.JoinToken;
 import ie.rkie.sm.db.JoinTokenDao;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -68,10 +69,13 @@ public class StartTest {
 	@Test
 	@WithUserDetails(value="bob", userDetailsServiceBeanName="userDetailsService")
 	public void testStartChessGame() throws Exception {
+		final String expectedOne = messageSource.getMessage("started.header", new Object [] {"chess"}, Locale.UK);
+		final String expectedTwo = messageSource.getMessage("started.send.link", null, Locale.UK);
+		
 		MvcResult result = mockMvc.perform(get("/start/chess/game"))
 			.andExpect(status().isOk())
-			.andExpect(content().string(containsString("You have started a game of chess!")))
-			.andExpect(content().string(containsString("Send this joining link on to your opponent")))
+			.andExpect(content().string(containsString(expectedOne)))
+			.andExpect(content().string(containsString(expectedTwo)))
 			.andReturn();
 		
 		// check for the token
